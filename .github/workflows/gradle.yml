@@ -11,17 +11,13 @@ on:
     branches: [ test ] 
 
 jobs:
-  build:
+  build-docker-image:
     runs-on: ubuntu-latest
-
-		# github repository에 접근하기 위해 check-out 하는 GitHub Action 공식 작업
-		# link : https://github.com/actions/checkout
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-				
-			# java version을 다운받고 setting 및 다른 부가 기능을 한다
-			# link : https://github.com/actions/setup-java
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
