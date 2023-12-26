@@ -7,8 +7,8 @@ env:
 
 # main branch에 push를 날릴 경우 GitHub Action을 실행
 on:
-  push:
-    branches: [ test ] 
+  pull_request:
+    branches: [ main ] 
 
 jobs:
   build-docker-image:
