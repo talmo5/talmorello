@@ -24,6 +24,7 @@ import talmo5.talmorello.user.entity.User;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseTime {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
