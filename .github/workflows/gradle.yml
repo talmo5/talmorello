@@ -7,7 +7,7 @@ env:
 
 # main branch에 push를 날릴 경우 GitHub Action을 실행
 on:
-  pull_request:
+  push:
     branches: [ test ] 
 
 jobs:
