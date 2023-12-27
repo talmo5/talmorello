@@ -10,6 +10,8 @@ import talmo5.talmorello.comment.dto.RegisterCommentDTO;
 import talmo5.talmorello.comment.entity.Comment;
 import talmo5.talmorello.comment.respository.CommentRepository;
 import talmo5.talmorello.global.exception.comment.CommentNotFoundException;
+import talmo5.talmorello.global.exception.common.ErrorCode;
+import talmo5.talmorello.global.exception.common.UnAuthorizedModifyException;
 import talmo5.talmorello.user.entity.User;
 
 @Service
@@ -22,7 +24,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public RegisterCommentDTO.Response registerComment(Long cardId, RegisterCommentDTO.Request requestDTO, Long userId) {
+    public RegisterCommentDTO.Response registerComment(Long cardId,
+            RegisterCommentDTO.Request requestDTO, Long userId) {
 
         // TODO 보드 사용자인지 검증 로직
 //        Card card = cardService.findById(cardId);
@@ -48,5 +51,21 @@ public class CommentService {
 
     public Comment findById(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+    }
+
+    public void deleteComment(Long commentId, Long userId) {
+
+        Comment comment = commentRepository.findByIdWithUser(commentId)
+                .orElseThrow(CommentNotFoundException::new);
+
+        validateDeleteAuthorization(comment.getUser().getId(), userId);
+
+        commentRepository.deleteById(commentId);
+    }
+
+    public void validateDeleteAuthorization(Long userIdFromRequest, Long userIdFromDB) {
+        if (!userIdFromDB.equals(userIdFromRequest)) {
+            throw new UnAuthorizedModifyException(ErrorCode.UNAUTHORIZED_MODIFY_EXCEPTION);
+        }
     }
 }
