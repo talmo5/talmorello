@@ -1,17 +1,13 @@
 name: Talmorella
 
-env:
-  PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
-  PROD_DB_USER: ${{ secrets.PROD_DB_USER }}
-  PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-
-# main branch에 push를 날릴 경우 GitHub Action을 실행
 on:
   pull_request:
     branches: [ main ]
+    types: [closed]
 
 jobs:
   build-docker-image:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -57,6 +53,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKERHUB_TAG }}
+
   deploy:
     needs: build-docker-image
     name: Deploy
@@ -64,5 +61,5 @@ jobs:
     steps:
       - name: Docker run
         run: |
-          sudo docker stop talmorello && docker rm talmorello && docker rmi ${{ secrets.DOCKER_TAG }}
-          sudo docker run -d -p 8080:8080 --env-file ./talmorello.env --name talmorello ${{ secrets.DOCKER_TAG }}        
+          sudo docker stop talmorello && docker rm talmorello && docker rmi ${{ secrets.DOCKERHUB_TAG }}
+          sudo docker run -d -p 8080:8080 ${{ secrets.PROD_ENV }} --name talmorello ${{ secrets.DOCKERHUB_TAG }}        
