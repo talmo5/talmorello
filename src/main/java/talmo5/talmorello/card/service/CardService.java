@@ -14,6 +14,7 @@ import talmo5.talmorello.carduser.pk.CardUserPK;
 import talmo5.talmorello.carduser.repository.CardUserRepository;
 import talmo5.talmorello.global.exception.card.AlreadyMemberOfCardException;
 import talmo5.talmorello.global.exception.card.CardNotFoundException;
+import talmo5.talmorello.global.exception.card.NotMemberOfCardException;
 import talmo5.talmorello.user.entity.User;
 
 @Service
@@ -66,11 +67,12 @@ public class CardService {
         return CardMemberDTO.of(userList);
     }
 
-    private void verifyUserNotExistsInCard(Long cardId, User tmpUser) {
+    private void verifyUserNotExistsInCard(Long cardId, User user) {
 
         List<User> userList = cardUserRepository.findUserByCardId(cardId);
+        List<Long> userIdList = userList.stream().map(User::getId).toList();
 
-        if(userList.contains(tmpUser)) {
+        if(userIdList.contains(tmpUser.getId())) {
             throw new AlreadyMemberOfCardException();
         }
     }
@@ -87,5 +89,42 @@ public class CardService {
                 .build();
 
         cardUserRepository.save(cardUser);
+    }
+
+    public CardMemberDTO deleteCardMember(Long cardId, Long userId) {
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        //User user = userService.findUserById(userId);
+        verifyUserExistsInCard(cardId, tmpUser);
+
+        deleteCardUser(card, tmpUser);
+
+        List<User> userList = cardUserRepository.findUserByCardId(cardId);
+
+        return CardMemberDTO.of(userList);
+    }
+
+    private void verifyUserExistsInCard(Long cardId, User user) {
+
+        List<User> userList = cardUserRepository.findUserByCardId(cardId);
+        List<Long> userIdList = userList.stream().map(User::getId).toList();
+
+        if(!userIdList.contains(tmpUser.getId())) {
+            throw new NotMemberOfCardException();
+        }
+    }
+
+    private void deleteCardUser(Card card, User user) {
+
+        CardUserPK cardUserPK = CardUserPK.builder()
+                .user(tmpUser)
+                .card(card)
+                .build();
+
+        CardUser cardUser = CardUser.builder()
+                .cardUserPK(cardUserPK)
+                .build();
+
+        cardUserRepository.delete(cardUser);
     }
 }
