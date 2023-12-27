@@ -1,11 +1,6 @@
 name: Talmorella
 
-env:
-  PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
-  PROD_DB_USER: ${{ secrets.PROD_DB_USER }}
-  PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-
-# main branch에 push를 날릴 경우 GitHub Action을 실행
+# main branch에 pull_request를 날릴 경우 GitHub Action을 실행
 on:
   pull_request:
     branches: [ main ]
@@ -65,4 +60,4 @@ jobs:
       - name: Docker run
         run: |
           sudo docker stop talmorello && docker rm talmorello && docker rmi ${{ secrets.DOCKERHUB_TAG }}
-          sudo docker run -d -p 8080:8080 --env-file ./talmorello.env --name talmorello ${{ secrets.DOCKERHUB_TAG }}        
+          sudo docker run -d -p 8080:8080 ${{ secrets.PROD_ENV }} --name talmorello ${{ secrets.DOCKERHUB_TAG }}        
