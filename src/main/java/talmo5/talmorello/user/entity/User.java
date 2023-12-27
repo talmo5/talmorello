@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +16,8 @@ import talmo5.talmorello.user.constant.SocialType;
 @Getter
 @Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTime {
 
     @Id
@@ -33,5 +34,14 @@ public class User extends BaseTime {
     private String password;
 
     private SocialType socialType;
+
+    public static User createNormalUser(String email, String username, String password) {
+        return User.builder()
+                .email(email)
+                .username(username)
+                .password(password)
+                .build();
+    }
+
 
 }
