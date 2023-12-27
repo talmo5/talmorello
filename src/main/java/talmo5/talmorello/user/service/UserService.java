@@ -32,8 +32,8 @@ public class UserService {
             throw new IllegalArgumentException("이미 사용중인 email입니다.");
         }
 
-        User user = User.createNormalUser(email, username, password);
-
+            User user = User.createUser(email, username, password);
+            userRepository.save(user);
     }
 
 

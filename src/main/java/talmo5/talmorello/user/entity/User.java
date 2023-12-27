@@ -35,13 +35,15 @@ public class User extends BaseTime {
 
     private SocialType socialType;
 
-    public static User createNormalUser(String email, String username, String password) {
+    public static User createUser(String email, String username, String password) {
         return User.builder()
                 .email(email)
                 .username(username)
                 .password(password)
                 .build();
     }
+
+
 
 
 }
