@@ -57,4 +57,12 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKERHUB_TAG }}
-          
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: [ self-hosted, label-development ]
+    steps:
+      - name: Docker run
+        run: |
+          sudo docker stop talmorello && docker rm talmorello && docker rmi ${{ secrets.DOCKER_TAG }}
+          sudo docker run -d -p 8080:8080 --env-file ./talmorello.env --name talmorello ${{ secrets.DOCKER_TAG }}        
