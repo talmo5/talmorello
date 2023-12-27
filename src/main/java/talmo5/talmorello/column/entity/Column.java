@@ -24,16 +24,21 @@ import talmo5.talmorello.board.entity.Board;
 @Table(name = "columns")
 public class Column extends BaseTime {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String title;
+  private String title;
 
-    private Integer orders;
+  private Integer orders;
 
-    @JoinColumn(name = "board_id", nullable = false)
+  /*  @JoinColumn(name = "board_id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Board board;
+    private Board board; */
+
+  public Column(String title, Integer orders) {
+    this.title = title;
+    this.orders = orders;
+  }
 
 }

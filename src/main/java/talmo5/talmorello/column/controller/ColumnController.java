@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import talmo5.talmorello.column.dto.ColumnRequestDTO;
+import talmo5.talmorello.column.dto.CreateColumnDTO;
 import talmo5.talmorello.column.service.ColumnService;
+import talmo5.talmorello.user.entity.User;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,13 +17,18 @@ public class ColumnController {
 
   private final ColumnService columnService;
 
+  private User user = User.builder()
+          .id(1L)
+          .email("sxxdxh2@gmail.com")
+          .username("dahee")
+          .build();
+
   // 컬럼 생성
   @PostMapping("")
   public ResponseEntity<String> createColumn(
-          @RequestBody ColumnRequestDTO columnRequestDTO,
-          @AuthenticationPrincipal UserDetailsImpl userDetails
+          @RequestBody CreateColumnDTO createColumnDTO
   ) {
-    return columnService.createColumn(columnRequestDTO, userDetails.getUser());
+    return columnService.createColumn(createColumnDTO, user.getId());
   }
 
 }

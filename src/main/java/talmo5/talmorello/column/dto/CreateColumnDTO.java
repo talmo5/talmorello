@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ColumnRequestDTO {
+public class CreateColumnDTO {
+
   private Long id;
   private String title;
 
