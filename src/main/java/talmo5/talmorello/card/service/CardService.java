@@ -26,12 +26,21 @@ public class CardService {
         //userService 에서 userId에 해당하는 유저 받아오기
         //User user = userService.findUserById(userId);
 
-        int orders = cardRepository.getLastOrders();
+        int orders = getLastOrders();
 
         Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), user, orders + 1);
 
         cardRepository.save(card);
 
         return CreateCardDTO.Response.of(card);
+    }
+
+    private int getLastOrders() {
+
+        Integer orders = cardRepository.getLastOrders();
+
+        if(orders == null) return 0;
+
+        return orders;
     }
 }
