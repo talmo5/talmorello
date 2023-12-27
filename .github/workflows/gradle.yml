@@ -1,12 +1,13 @@
 name: Talmorella
 
-# main branch에 pull_request를 날릴 경우 GitHub Action을 실행
 on:
   pull_request:
     branches: [ main ]
+    types: [closed]
 
 jobs:
   build-docker-image:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
