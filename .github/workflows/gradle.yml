@@ -52,6 +52,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKERHUB_TAG }}
+
   deploy:
     needs: build-docker-image
     name: Deploy
