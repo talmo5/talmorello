@@ -22,21 +22,15 @@ public class CreateCardDTO {
         }
     }
 
-    //추후 댓글들과 체크리스트도 보내줘야함
     @Builder
-    public record Response(Long cardId, String cardTitle, String cardDescription, String username,
-                           LocalDateTime startDate, LocalDateTime dueDate, LocalDateTime createdAt
-                           ) {
+    public record Response(Long cardId, String cardTitle, String username, LocalDateTime createdAt) {
 
         public static Response of(Card card) {
 
             return Response.builder()
                     .cardId(card.getId())
                     .cardTitle(card.getTitle())
-                    .cardDescription(card.getContent())
                     .username(card.getUser().getUsername())
-                    .startDate(card.getStartDate())
-                    .dueDate(card.getDueDate())
                     .createdAt(card.getCreatedAt())
                     .build();
         }
