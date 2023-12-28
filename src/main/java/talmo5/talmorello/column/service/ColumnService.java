@@ -11,7 +11,6 @@ import talmo5.talmorello.column.dto.ModifyColumnDTO;
 import talmo5.talmorello.column.entity.Column;
 import talmo5.talmorello.column.repository.ColumnRepository;
 import talmo5.talmorello.global.exception.column.ColumnNotFoundException;
-import talmo5.talmorello.global.exception.common.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
@@ -59,9 +58,8 @@ public class ColumnService {
 
   public Column getColumn(Long columnId) {
     return columnRepository.findById(columnId).orElseThrow(
-            () -> {
-              throw new ColumnNotFoundException(ErrorCode.NOT_FOUND_COLUMN_EXCEPTION);
-            });
+            ColumnNotFoundException::new);
+    }
+
   }
 
-}
