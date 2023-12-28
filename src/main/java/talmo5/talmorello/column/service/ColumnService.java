@@ -56,6 +56,22 @@ public class ColumnService {
 
   }
 
+  @Transactional
+  public void changeColumn(Long columnId, int columnOrders) {
+
+    Column column = getColumn(columnId);
+
+    int oldOrders = column.getOrders();
+    int newOrders = columnOrders;
+
+    if (newOrders > oldOrders) {
+      columnRepository.addOneToColumnOrders(board, newOrders, oldOrders);
+    } else {
+      columnRepository.subtractOneToColumnOrders(board, newOrders, oldOrders);
+    }
+    column.changeOrders(columnOrders);
+  }
+
   public Column getColumn(Long columnId) {
     return columnRepository.findById(columnId).orElseThrow(
             ColumnNotFoundException::new);

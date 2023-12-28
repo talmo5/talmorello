@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.column.dto.CreateColumnDTO;
 import talmo5.talmorello.column.dto.ModifyColumnDTO;
+import talmo5.talmorello.column.repository.ColumnRepository;
 import talmo5.talmorello.column.service.ColumnService;
 
 @RestController
@@ -19,6 +20,7 @@ import talmo5.talmorello.column.service.ColumnService;
 public class ColumnController {
 
   private final ColumnService columnService;
+  private final ColumnRepository columnRepository;
 
   @PostMapping("/boards/{boardId}")
   public ResponseEntity<CreateColumnDTO.Response> createColumn(
@@ -39,9 +41,22 @@ public class ColumnController {
           @PathVariable Long columnId,
           @RequestBody @Valid ModifyColumnDTO.Request modifyColumnDTO
   ) {
-    ModifyColumnDTO.Response responseDTO = columnService.modifyColumnName(columnId, modifyColumnDTO);
+    ModifyColumnDTO.Response responseDTO = columnService.modifyColumnName(columnId,
+            modifyColumnDTO);
 
     return ResponseEntity.ok(responseDTO);
   }
+
+  // 컬럼 이동 changeColumn
+  @PatchMapping("/{columnId}/order/{columnOrders}")
+  public ResponseEntity<String> changeColumn(
+          @PathVariable Long columnId,
+          @PathVariable int columnOrders
+  ) {
+    columnService.changeColumn(columnId, columnOrders);
+
+    return ResponseEntity.ok("컬럼 이동 성공");
+  }
+
 
 }
