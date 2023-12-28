@@ -38,4 +38,7 @@ public class Todo extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Card card;
 
+    public void updateTodo(String todoContent) {
+        this.content = todoContent;
+    }
 }
