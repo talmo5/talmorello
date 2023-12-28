@@ -9,7 +9,6 @@ import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.boarduser.entity.BoardUser;
 
 @Getter
-@Setter
 @Entity
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -29,24 +28,24 @@ public class Board extends BaseTime {
     @Column
     private BoardColor boardColor;
 
+    @Singular("BoardUsers")
     @OneToMany
-    private List<BoardUser> BoardUser = new ArrayList<>();
+    private List<BoardUser> boardUser = new ArrayList<>();
 
+    @Singular("Columns")
     @OneToMany
     private List<talmo5.talmorello.column.entity.Column> columns = new ArrayList<>();
 
-    public Board(BoardColor boardColor, String content, String title) {
-        this.title = title;
-        this.content = content;
-        this.boardColor = boardColor;
+    @Getter
+    public static class BoardResponseDto {
+        private final String title;
+        private final String content;
+        private final BoardColor board_color;
+        public BoardResponseDto(Board board) {
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.board_color = board.getBoardColor();
+        }
     }
-
-    public void addUser(/*User user*/){
-        //BoardUser.add(new BoardUser(new BoardUserPK(this, user)));
-    }
-
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
 
 }

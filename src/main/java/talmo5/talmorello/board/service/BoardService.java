@@ -1,14 +1,30 @@
 package talmo5.talmorello.board.service;
 
-import talmo5.talmorello.board.dto.BoardInviteRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.board.dto.BoardRequestDto;
-import talmo5.talmorello.board.dto.BoardResponseDto;
+import talmo5.talmorello.board.entity.Board;
+import talmo5.talmorello.board.repository.BoardRepository;
 
-public interface BoardService {
-    /**
-     * 보드 생성
-     * @param requestDto 보드 생성 요청 정보
-     * @param user 보드 작성자
-     */
-    BoardResponseDto postBoard(BoardRequestDto requestDto/*, User user*/);
+@Service
+@RequiredArgsConstructor
+public class BoardService{
+    private final BoardRepository boardRepository;
+
+    public Board.BoardResponseDto postBoard(BoardRequestDto requestDto) {
+        return buildBoard(requestDto);
+    }
+
+    private Board.BoardResponseDto buildBoard(BoardRequestDto requestDto){
+        Board board = Board.builder()
+                .title(requestDto.title())
+                .content(requestDto.content())
+                .boardColor(BoardColor.valueOfLabel(requestDto.boardColor()))
+                .build();
+
+        boardRepository.save(board);
+        return new Board.BoardResponseDto(board);
+    }
 }
+
