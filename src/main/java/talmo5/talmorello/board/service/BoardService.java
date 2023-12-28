@@ -1,5 +1,6 @@
 package talmo5.talmorello.board.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import talmo5.talmorello.board.dto.PostBoardDTO;
@@ -23,6 +24,7 @@ public class BoardService{
         return PostBoardDTO.response(board);
     }
 
+    @Transactional
     public void patchBoard(Request requestDto, Long boardId) {
         Board board = findbyId(boardId);
         board.update(requestDto.title(), requestDto.content(), requestDto.boardColor());
