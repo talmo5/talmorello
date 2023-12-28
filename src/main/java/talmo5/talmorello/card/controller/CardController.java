@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import talmo5.talmorello.card.dto.CardMemberDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO;
 import talmo5.talmorello.card.service.CardService;
 import talmo5.talmorello.user.entity.User;
@@ -37,20 +36,20 @@ public class CardController {
     }
 
     @PostMapping("/{cardId}/member/{userId}")
-    public ResponseEntity<CardMemberDTO> addMemberToCard(@PathVariable Long cardId,
+    public ResponseEntity<String> addUserToCard(@PathVariable Long cardId,
             @PathVariable Long userId) {
 
-        CardMemberDTO responseDTO = cardService.addMemberToCard(cardId, userId);
+        cardService.addUserToCard(cardId, userId);
 
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok("카드에 유저 추가 완료");
     }
 
     @DeleteMapping("/{cardId}/member/{userId}")
-    public ResponseEntity<CardMemberDTO> deleteCardMember(@PathVariable Long cardId,
+    public ResponseEntity<String> deleteCardUser(@PathVariable Long cardId,
             @PathVariable Long userId) {
 
-        CardMemberDTO responseDTO = cardService.deleteCardMember(cardId, userId);
+        cardService.deleteCardUser(cardId, userId);
 
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok("카드 유저 삭제 완료");
     }
 }
