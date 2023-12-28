@@ -36,7 +36,7 @@ public class CustomColumnRepositoryImpl implements CustomColumnRepository {
        */
     jpaQueryFactory.
             update(column)
-            .set(column.orders, column.orders.add(1))
+            .set(column.orders, column.orders.subtract(1))
             .where(column.board.eq(board),
                     column.orders.goe(newOrders),
                     column.orders.lt(oldOrders)
