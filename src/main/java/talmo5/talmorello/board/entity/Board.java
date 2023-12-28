@@ -35,17 +35,4 @@ public class Board extends BaseTime {
     @Singular("Columns")
     @OneToMany
     private List<talmo5.talmorello.column.entity.Column> columns = new ArrayList<>();
-
-    @Getter
-    public static class BoardResponseDto {
-        private final String title;
-        private final String content;
-        private final BoardColor board_color;
-        public BoardResponseDto(Board board) {
-            this.title = board.getTitle();
-            this.content = board.getContent();
-            this.board_color = board.getBoardColor();
-        }
-    }
-
 }

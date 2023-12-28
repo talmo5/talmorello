@@ -24,7 +24,11 @@ public class BoardService{
                 .build();
 
         boardRepository.save(board);
-        return new Board.BoardResponseDto(board);
+        return PostBoardDTO.Response.builder()
+                .title(board.getTitle())
+                .content(board.getContent())
+                .board_color(board.getBoardColor())
+                .build();
     }
 }
 
