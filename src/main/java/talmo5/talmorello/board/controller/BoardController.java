@@ -17,4 +17,10 @@ public class BoardController {
     public ResponseEntity<PostBoardDTO.Response> postBoard(@Valid @RequestBody PostBoardDTO.Request requestDto){
         return ResponseEntity.ok().body(boardService.postBoard(requestDto));
     }
+
+    @PatchMapping("/{boardId}")
+    public ResponseEntity<?> patchBoard(@Valid @RequestBody PostBoardDTO.Request requestDto, @PathVariable Long boardId){
+        boardService.patchBoard(requestDto, boardId);
+        return ResponseEntity.ok().body("수정 성공");
+    }
 }
