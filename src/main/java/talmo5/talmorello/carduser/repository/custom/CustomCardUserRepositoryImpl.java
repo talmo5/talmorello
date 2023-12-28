@@ -6,7 +6,9 @@ import static talmo5.talmorello.user.entity.QUser.user;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import talmo5.talmorello.carduser.entity.CardUser;
 import talmo5.talmorello.user.entity.User;
 
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class CustomCardUserRepositoryImpl implements CustomCardUserRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<User> findUserByCardId(Long cardId){
+    public List<User> findUsersByCardId(Long cardId) {
 
         return jpaQueryFactory
                 .selectFrom(user)
@@ -27,5 +29,16 @@ public class CustomCardUserRepositoryImpl implements CustomCardUserRepository {
                     )
                 )
                 .fetch();
+    }
+  
+    @Override
+    public Optional<CardUser> findCardUserByCardIdAndUserId(Long cardId, Long userId) {
+
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(cardUser)
+                .where(cardUser.cardUserPK.card.id.eq(cardId)
+                        .and(cardUser.cardUserPK.user.id.eq(userId))
+                )
+                .fetchOne());
     }
 }
