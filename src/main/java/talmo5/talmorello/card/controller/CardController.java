@@ -46,7 +46,7 @@ public class CardController {
 
         cardService.modifyCardTitle(cardId, modifyCardTitleDTO.cardTitle());
 
-        return ResponseEntity.ok("카드 제목 변경 성공");
+        return ResponseEntity.ok("카드 제목 수정 성공");
     }
 
     @PatchMapping("/{cardId}/description")
@@ -56,6 +56,15 @@ public class CardController {
         cardService.modifyCardDescription(cardId, modifyCardDescriptionDTO.cardDescription());
 
         return ResponseEntity.ok("카드 내용 수정 성공");
+    }
+
+    @PatchMapping("/{cardId}/column/{columnId}")
+    public ResponseEntity<String> changeColumnOfCard(@PathVariable Long cardId,
+            @PathVariable Long columnId) {
+
+        cardService.changeColumnOfCard(cardId, columnId);
+
+        return ResponseEntity.ok("카드 컬럼 변경 성공");
     }
 
     @PostMapping("/{cardId}/member/{userId}")

@@ -63,4 +63,6 @@ public class Card extends BaseTime {
     public void changeCardDescription(String cardDescription) {
         this.content = cardDescription;
     }
+
+    public void changeColumnOfCard( talmo5.talmorello.column.entity.Column column) { this.column = column; }
 }

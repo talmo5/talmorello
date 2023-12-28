@@ -77,6 +77,16 @@ public class CardService {
         card.changeCardDescription(cardDescription);
     }
 
+    @Transactional
+    public void changeColumnOfCard(Long cardId, Long columnId) {
+
+        //Column column = columnService.findColumById(columnId);
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+
+        card.changeColumnOfCard(tmpColumn);
+    }
+
     public void addUserToCard(Long cardId, Long userId) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
