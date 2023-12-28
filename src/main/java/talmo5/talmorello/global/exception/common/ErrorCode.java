@@ -44,6 +44,7 @@ public enum ErrorCode {
     ALREADY_MEMBER_OF_CARD_EXCEPTION(400, "이미 카드의 멤버인 회원입니다."),
     NOT_MEMBER_OF_CARD_EXCEPTION(400, "카드의 멤버가 아닙니다"),
 
+
     // Comment
     NOT_FOUND_COMMENT_EXCEPTION(401, "해당 댓글을 찾을 수 없습니다."),
 

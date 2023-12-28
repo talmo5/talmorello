@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import talmo5.talmorello.card.dto.CardMemberDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO;
 import talmo5.talmorello.card.service.CardService;
 import talmo5.talmorello.user.entity.User;

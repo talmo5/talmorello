@@ -30,7 +30,7 @@ public class CustomCardUserRepositoryImpl implements CustomCardUserRepository {
                 )
                 .fetch();
     }
-
+  
     @Override
     public Optional<CardUser> findCardUserByCardIdAndUserId(Long cardId, Long userId) {
 
@@ -41,6 +41,4 @@ public class CustomCardUserRepositoryImpl implements CustomCardUserRepository {
                 )
                 .fetchOne());
     }
-
-
 }

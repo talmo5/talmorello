@@ -1,8 +1,10 @@
 package talmo5.talmorello.card.service;
 
+
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import talmo5.talmorello.card.dto.CardMemberDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO.Request;
 import talmo5.talmorello.card.dto.CreateCardDTO.Response;
