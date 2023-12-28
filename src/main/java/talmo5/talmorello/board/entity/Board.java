@@ -31,8 +31,8 @@ public class Board extends BaseTime {
     private List<talmo5.talmorello.column.entity.Column> columns = new ArrayList<>();
 
     public void update(String title, String content, BoardColor boardColor) {
-        if (!title.isEmpty()) this.title = title;
-        if (!content.isEmpty()) this.content = content;
+        if (!title.isBlank()) this.title = title;
+        if (!content.isBlank()) this.content = content;
         this.boardColor = boardColor;
     }
 }
