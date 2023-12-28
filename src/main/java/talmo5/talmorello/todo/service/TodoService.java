@@ -45,7 +45,13 @@ public class TodoService {
     public void checkTodo(Long todoId, Long userId) {
 
         Todo todo = todoRepository.findById(todoId).orElseThrow(TodoNotFoundException::new);
-
         todo.check();
+    }
+
+    @Transactional
+    public void uncheckTodo(Long todoId, Long userId) {
+
+        Todo todo = todoRepository.findById(todoId).orElseThrow(TodoNotFoundException::new);
+        todo.uncheck();
     }
 }

@@ -45,4 +45,8 @@ public class Todo extends BaseTime {
     public void check() {
         this.todoStatus = TodoStatus.CHECK;
     }
+
+    public void uncheck() {
+        this.todoStatus = TodoStatus.UNCHECK;
+    }
 }
