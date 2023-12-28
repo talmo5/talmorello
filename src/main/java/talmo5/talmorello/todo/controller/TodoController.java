@@ -41,4 +41,13 @@ public class TodoController {
         return ResponseEntity.ok("할일 내용 수정 성공");
     }
 
+    @PostMapping("{todoId}/check")
+    public ResponseEntity<?> checkTodo(@PathVariable Long todoId) {
+
+        Long userId = 1L;
+        todoService.checkTodo(todoId, userId);
+
+        return ResponseEntity.ok("할일 체크 성공");
+    }
+
 }

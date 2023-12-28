@@ -41,4 +41,8 @@ public class Todo extends BaseTime {
     public void updateTodo(String todoContent) {
         this.content = todoContent;
     }
+
+    public void check() {
+        this.todoStatus = TodoStatus.CHECK;
+    }
 }
