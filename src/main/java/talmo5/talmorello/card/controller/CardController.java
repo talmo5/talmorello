@@ -58,11 +58,11 @@ public class CardController {
         return ResponseEntity.ok("카드 내용 수정 성공");
     }
 
-    @PatchMapping("/{cardId}/column/{columnId}")
+    @PatchMapping("/{cardId}/column/{columnId}/{cardOrders}")
     public ResponseEntity<String> changeColumnOfCard(@PathVariable Long cardId,
-            @PathVariable Long columnId) {
+            @PathVariable Long columnId, @PathVariable int cardOrders) {
 
-        cardService.changeColumnOfCard(cardId, columnId);
+        cardService.changeColumnOfCard(cardId, columnId, cardOrders);
 
         return ResponseEntity.ok("카드 컬럼 변경 성공");
     }
