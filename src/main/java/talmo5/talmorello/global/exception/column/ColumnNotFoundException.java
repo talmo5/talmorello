@@ -1,11 +1,12 @@
 package talmo5.talmorello.global.exception.column;
 
+import static talmo5.talmorello.global.exception.common.ErrorCode.NOT_FOUND_COLUMN_EXCEPTION;
+
 import talmo5.talmorello.global.exception.common.BusinessException;
-import talmo5.talmorello.global.exception.common.ErrorCode;
 
 public class ColumnNotFoundException extends BusinessException {
-  public ColumnNotFoundException(ErrorCode errorCode) {
-    super(errorCode);
+  public ColumnNotFoundException() {
+    super(NOT_FOUND_COLUMN_EXCEPTION);
   }
 
 }

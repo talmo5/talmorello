@@ -2,13 +2,15 @@ package talmo5.talmorello.column.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.column.dto.CreateColumnDTO;
-import talmo5.talmorello.column.dto.CreateColumnDTO.Request;
 import talmo5.talmorello.column.dto.CreateColumnDTO.Response;
+import talmo5.talmorello.column.dto.ModifyColumnDTO;
 import talmo5.talmorello.column.entity.Column;
 import talmo5.talmorello.column.repository.ColumnRepository;
+import talmo5.talmorello.global.exception.column.ColumnNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class ColumnService {
           .build();
 
 
-  public Response createColumn(Long boardId, Request createColumnDTO) {
+  public Response createColumn(Long boardId, CreateColumnDTO.Request createColumnDTO) {
 
     int orders = getLastOrders();
     Column column = createColumnDTO.toEntity(createColumnDTO.columnTitle(), board, orders + 1);
@@ -43,4 +45,21 @@ public class ColumnService {
     return orders;
   }
 
-}
+  @Transactional
+  public ModifyColumnDTO.Response modifyColumnName(Long columnId, ModifyColumnDTO.Request modifyColumnDTO) {
+
+    Column column = getColumn(columnId);
+
+    column.modifyColumnName(modifyColumnDTO.columnTitle());
+
+    return ModifyColumnDTO.Response.from(column);
+
+  }
+
+  public Column getColumn(Long columnId) {
+    return columnRepository.findById(columnId).orElseThrow(
+            ColumnNotFoundException::new);
+    }
+
+  }
+
