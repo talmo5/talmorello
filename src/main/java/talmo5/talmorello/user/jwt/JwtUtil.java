@@ -51,12 +51,13 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username) {
+    public String createToken(Long userId, String username) {
 
         Date date = new Date();
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
+                        .setAudience(String.valueOf(userId))
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .signWith(key, signatureAlgorithm)
                         .compact();
@@ -97,11 +98,19 @@ public class JwtUtil {
         }
         return false;
     }
-    public Claims getUserInfoFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+
+    public String getUsernameFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()
+                .getSubject();
     }
 
+    public Long getUserIdFromToken(String token) {
+        return Long.parseLong(
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()
+                        .getAudience());
+    }
     //  Cookie Value : JWT 가져오기
+
     public String getTokenFromRequest(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         if(cookies != null) {

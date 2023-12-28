@@ -5,8 +5,11 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import talmo5.talmorello.global.exception.user.PasswordMismatchedException;
+import talmo5.talmorello.global.exception.user.UserAlreadyExistException;
+import talmo5.talmorello.global.exception.user.UserNotFoundException;
 import talmo5.talmorello.user.dto.LoginRequestDto;
-import talmo5.talmorello.user.dto.SignupRequestDto;
+import talmo5.talmorello.user.dto.SignupRequestDTO;
 import talmo5.talmorello.user.entity.User;
 import talmo5.talmorello.user.jwt.JwtUtil;
 import talmo5.talmorello.user.repository.UserRepository;
@@ -19,42 +22,42 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public void signup(SignupRequestDto requestDto){
-        String username = requestDto.getUsername();
-        String password = passwordEncoder.encode(requestDto.getPassword());
-        String email = requestDto.getEmail();
+    public SignupRequestDTO.Response signup(SignupRequestDTO.Request requestDto){
+        String username = requestDto.username();
+        String password = passwordEncoder.encode(requestDto.password());
+        String email = requestDto.email();
 
+        validateDuplication(username, email);
+
+        User user = User.createUser(email, username, password);
+        userRepository.save(user);
+    }
+
+    public void validateDuplication(String username, String email) {
 
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
-            throw new IllegalArgumentException("사용중인 username입니다.");
+            throw new UserAlreadyExistException();
         }
 
         Optional<User> checkEmail = userRepository.findByEmail(email);
         if (checkEmail.isPresent()) {
-            throw new IllegalArgumentException("이미 사용중인 email입니다.");
+            throw new UserAlreadyExistException();
         }
-
-        User user = User.createUser(email, username, password);
-        userRepository.save(user);
     }
 
     public void login(LoginRequestDto requestDto, HttpServletResponse res){
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                    () -> new IllegalArgumentException("일치하는 사용자가 없습니다!")
-        );
-
+        User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(password, user.getPassword())){
-            throw new IllegalArgumentException("다시 입력하세요! 비밀번호가 일치하지 않습니다!");
+            throw new PasswordMismatchedException();
         }
 
-        String token = jwtUtil.createToken(user.getUsername());
+        String token = jwtUtil.createToken(user.getId(), user.getUsername());
         jwtUtil.addJwtToCookie(token, res);
-
     }
 
 

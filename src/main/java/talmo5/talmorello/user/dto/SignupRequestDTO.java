@@ -1,7 +1,9 @@
 package talmo5.talmorello.user.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import talmo5.talmorello.user.entity.User;
 
 @Getter
 @Setter

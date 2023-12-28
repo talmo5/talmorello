@@ -2,13 +2,13 @@ package talmo5.talmorello.user.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.user.dto.LoginRequestDto;
-import talmo5.talmorello.user.dto.SignupRequestDto;
-import talmo5.talmorello.user.jwt.JwtUtil;
+import talmo5.talmorello.user.dto.SignupRequestDTO;
 import talmo5.talmorello.user.service.UserService;
 
 @RestController
@@ -19,22 +19,21 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/normal-users/signup")
-    public String signup(@RequestBody SignupRequestDto requestDto){
-        userService.signup(requestDto);
-        return "redirect:api/normal-users/login";
+    public ResponseEntity<SignupRequestDTO.Response> signup(
+            @RequestBody SignupRequestDTO.Request requestDTO) {
+
+        SignupRequestDTO.Response responseDTO = userService.signup(requestDTO);
+
+        return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping("/normal-users/login")
-    public String login(@RequestBody LoginRequestDto requestDto, HttpServletResponse res){
-        try {
-            userService.login(requestDto, res);
-            return "로그인 성공! 환영합니다!";
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto,
+            HttpServletResponse res) {
 
-        } catch (Exception e){
+        userService.login(requestDto, res);
 
-            return "redirect:/api/normal-users/login?message=Login failed";
-
-        }
+        return ResponseEntity.ok("로그인 성공! 환영합니다!");
     }
 
 }
