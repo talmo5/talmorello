@@ -61,6 +61,14 @@ public class CardService {
         card.changeCardTitle(cardTitle);
     }
 
+    @Transactional
+    public void modifyCardDescription(Long cardId, String cardDescription) {
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+
+        card.changeCardDescription(cardDescription);
+    }
+
     public void addUserToCard(Long cardId, Long userId) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.card.dto.CreateCardDTO;
+import talmo5.talmorello.card.dto.ModifyCardDescriptionDTO;
 import talmo5.talmorello.card.dto.ModifyCardTitleDTO;
 import talmo5.talmorello.card.service.CardService;
 import talmo5.talmorello.user.entity.User;
@@ -44,6 +45,15 @@ public class CardController {
         cardService.modifyCardTitle(cardId, modifyCardTitleDTO.cardTitle());
 
         return ResponseEntity.ok("카드 제목 변경 성공");
+    }
+
+    @PatchMapping("/{cardId}/description")
+    public ResponseEntity<String> modifyCardDescription(@PathVariable Long cardId,
+            @RequestBody @Valid ModifyCardDescriptionDTO modifyCardDescriptionDTO) {
+
+        cardService.modifyCardDescription(cardId, modifyCardDescriptionDTO.cardDescription());
+
+        return ResponseEntity.ok("카드 내용 수정 성공");
     }
 
     @PostMapping("/{cardId}/member/{userId}")

@@ -48,4 +48,8 @@ public class Card extends BaseTime {
     public void changeCardTitle(String cardTitle) {
         this.title = cardTitle;
     }
+
+    public void changeCardDescription(String cardDescription) {
+        this.content = cardDescription;
+    }
 }
