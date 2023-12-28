@@ -4,13 +4,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import talmo5.talmorello.card.dto.CardMemberDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO;
+import talmo5.talmorello.card.dto.ModifyCardTitleDTO;
 import talmo5.talmorello.card.service.CardService;
 import talmo5.talmorello.user.entity.User;
 
@@ -34,6 +35,15 @@ public class CardController {
         CreateCardDTO.Response responseDTO = cardService.createCard(createCardDTO, user.getId());
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @PatchMapping("/{cardId}/title")
+    public ResponseEntity<String> modifyCardTitle(@PathVariable Long cardId,
+            @RequestBody @Valid ModifyCardTitleDTO modifyCardTitleDTO) {
+
+        cardService.modifyCardTitle(cardId, modifyCardTitleDTO.cardTitle());
+
+        return ResponseEntity.ok("카드 제목 변경 성공");
     }
 
     @PostMapping("/{cardId}/member/{userId}")
