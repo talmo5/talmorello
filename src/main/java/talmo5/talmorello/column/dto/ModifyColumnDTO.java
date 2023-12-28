@@ -2,7 +2,6 @@ package talmo5.talmorello.column.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import talmo5.talmorello.column.entity.Column;
 

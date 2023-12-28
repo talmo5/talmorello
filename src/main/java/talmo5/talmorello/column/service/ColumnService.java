@@ -1,13 +1,11 @@
 package talmo5.talmorello.column.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.column.dto.CreateColumnDTO;
-import talmo5.talmorello.column.dto.CreateColumnDTO.Request;
 import talmo5.talmorello.column.dto.CreateColumnDTO.Response;
 import talmo5.talmorello.column.dto.ModifyColumnDTO;
 import talmo5.talmorello.column.entity.Column;
