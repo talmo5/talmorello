@@ -24,4 +24,11 @@ public class BoardController {
         boardService.patchBoard(requestDto, boardId);
         return ResponseEntity.ok().body("수정 성공");
     }
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId){
+        boardService.deleteBoard(boardId);
+        return ResponseEntity.ok().body("삭제 성공");
+    }
+
 }

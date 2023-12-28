@@ -30,6 +30,11 @@ public class BoardService{
         board.update(requestDto.title(), requestDto.content(), requestDto.boardColor());
     }
 
+    public void deleteBoard(Long boardId) {
+        Board board = findbyId(boardId);
+        boardRepository.delete(board);
+    }
+
     private Board findbyId(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
     }
