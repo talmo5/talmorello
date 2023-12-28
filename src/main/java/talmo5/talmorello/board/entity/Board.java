@@ -25,7 +25,7 @@ public class Board extends BaseTime {
     @Column(length = 500)
     private String content;
 
-    @Column
+    @Enumerated(EnumType.STRING)
     private BoardColor boardColor;
 
     @Singular("BoardUsers")

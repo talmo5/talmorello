@@ -2,8 +2,7 @@ package talmo5.talmorello.board.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import talmo5.talmorello.board.constant.BoardColor;
-import talmo5.talmorello.board.dto.BoardRequestDto;
+import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.board.repository.BoardRepository;
 
@@ -12,15 +11,15 @@ import talmo5.talmorello.board.repository.BoardRepository;
 public class BoardService{
     private final BoardRepository boardRepository;
 
-    public Board.BoardResponseDto postBoard(BoardRequestDto requestDto) {
+    public PostBoardDTO.Response postBoard(PostBoardDTO.Request requestDto) {
         return buildBoard(requestDto);
     }
 
-    private Board.BoardResponseDto buildBoard(BoardRequestDto requestDto){
+    private PostBoardDTO.Response buildBoard(PostBoardDTO.Request requestDto){
         Board board = Board.builder()
                 .title(requestDto.title())
                 .content(requestDto.content())
-                .boardColor(BoardColor.valueOfLabel(requestDto.boardColor()))
+                .boardColor(requestDto.boardColor())
                 .build();
 
         boardRepository.save(board);
