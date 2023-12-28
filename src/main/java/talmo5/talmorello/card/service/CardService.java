@@ -4,7 +4,7 @@ package talmo5.talmorello.card.service;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import talmo5.talmorello.card.dto.CardMemberDTO;
+import org.springframework.transaction.annotation.Transactional;
 import talmo5.talmorello.card.dto.CreateCardDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO.Request;
 import talmo5.talmorello.card.dto.CreateCardDTO.Response;
@@ -51,6 +51,14 @@ public class CardService {
         if(orders == null) return 0;
 
         return orders;
+    }
+
+    @Transactional
+    public void modifyCardTitle(Long cardId, String cardTitle) {
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+
+        card.changeCardTitle(cardTitle);
     }
 
     public void addUserToCard(Long cardId, Long userId) {

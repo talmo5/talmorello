@@ -45,4 +45,7 @@ public class Card extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
+    public void changeCardTitle(String cardTitle) {
+        this.title = cardTitle;
+    }
 }
