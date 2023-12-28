@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import talmo5.talmorello.auditing.BaseTime;
+import talmo5.talmorello.card.constant.Priority;
 import talmo5.talmorello.user.entity.User;
 
 @Getter
@@ -41,9 +42,15 @@ public class Card extends BaseTime {
 
     private LocalDateTime dueDate;
 
+    private Priority priority;
+
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
+
+    @JoinColumn(name = "column_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private talmo5.talmorello.column.entity.Column column;
 
     public void changeCardTitle(String cardTitle) {
         this.title = cardTitle;
