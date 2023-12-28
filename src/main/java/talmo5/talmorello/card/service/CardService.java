@@ -12,6 +12,7 @@ import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.card.repository.CardRepository;
 import talmo5.talmorello.carduser.entity.CardUser;
 import talmo5.talmorello.carduser.repository.CardUserRepository;
+import talmo5.talmorello.column.entity.Column;
 import talmo5.talmorello.global.exception.card.AlreadyUserOfCardException;
 import talmo5.talmorello.global.exception.card.CardNotFoundException;
 import talmo5.talmorello.user.entity.User;
@@ -30,14 +31,21 @@ public class CardService {
             .username("dongha")
             .build();
 
-    public Response createCard(Request createCardDTO, Long userId) {
+    private Column tmpColumn = Column.builder()
+            .id(2L)
+            .title("임시 컬럼")
+            .build();
+
+    public Response createCard(Request createCardDTO, Long userId, Long columnId) {
 
         //userService 에서 userId에 해당하는 유저 받아오기
         //User user = userService.findUserById(userId);
+        //Column column = columnService.findColumnById(columnId);
 
         int orders = getLastOrders();
 
-        Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), tmpUser, orders + 1);
+        Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), tmpUser,
+                orders + 1, tmpColumn);
 
         cardRepository.save(card);
 
