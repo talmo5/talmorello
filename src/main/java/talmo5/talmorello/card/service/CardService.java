@@ -1,12 +1,19 @@
 package talmo5.talmorello.card.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import talmo5.talmorello.card.dto.CardMemberDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO.Request;
 import talmo5.talmorello.card.dto.CreateCardDTO.Response;
 import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.card.repository.CardRepository;
+import talmo5.talmorello.carduser.entity.CardUser;
+import talmo5.talmorello.carduser.pk.CardUserPK;
+import talmo5.talmorello.carduser.repository.CardUserRepository;
+import talmo5.talmorello.global.exception.card.AlreadyMemberOfCardException;
+import talmo5.talmorello.global.exception.card.CardNotFoundException;
 import talmo5.talmorello.user.entity.User;
 
 @Service
@@ -15,7 +22,9 @@ public class CardService {
 
     private final CardRepository cardRepository;
 
-    private User user = User.builder()
+    private final CardUserRepository cardUserRepository;
+
+    private User tmpUser = User.builder()
             .id(1L)
             .email("wkdehdgk159@gmail.com")
             .username("dongha")
@@ -28,7 +37,7 @@ public class CardService {
 
         int orders = getLastOrders();
 
-        Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), user, orders + 1);
+        Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), tmpUser, orders + 1);
 
         cardRepository.save(card);
 
@@ -42,5 +51,41 @@ public class CardService {
         if(orders == null) return 0;
 
         return orders;
+    }
+
+    public CardMemberDTO addMemberToCard(Long cardId, Long userId) {
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        //User user = userService.findUserById(userId);
+        verifyUserNotExistsInCard(cardId, tmpUser);
+
+        saveCardUser(card, tmpUser);
+
+        List<User> userList = cardUserRepository.findUserByCardId(cardId);
+
+        return CardMemberDTO.of(userList);
+    }
+
+    private void verifyUserNotExistsInCard(Long cardId, User tmpUser) {
+
+        List<User> userList = cardUserRepository.findUserByCardId(cardId);
+
+        if(userList.contains(tmpUser)) {
+            throw new AlreadyMemberOfCardException();
+        }
+    }
+
+    private void saveCardUser(Card card, User user) {
+
+        CardUserPK cardUserPK = CardUserPK.builder()
+                .user(tmpUser)
+                .card(card)
+                .build();
+
+        CardUser cardUser = CardUser.builder()
+                .cardUserPK(cardUserPK)
+                .build();
+
+        cardUserRepository.save(cardUser);
     }
 }
