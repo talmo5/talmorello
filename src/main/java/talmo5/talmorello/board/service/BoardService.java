@@ -16,18 +16,9 @@ public class BoardService{
     }
 
     private PostBoardDTO.Response buildBoard(PostBoardDTO.Request requestDto){
-        Board board = Board.builder()
-                .title(requestDto.title())
-                .content(requestDto.content())
-                .boardColor(requestDto.boardColor())
-                .build();
-
+        Board board = Board.buildBoard(requestDto);
         boardRepository.save(board);
-        return PostBoardDTO.Response.builder()
-                .title(board.getTitle())
-                .content(board.getContent())
-                .board_color(board.getBoardColor())
-                .build();
+        return PostBoardDTO.response(board);
     }
 }
 
