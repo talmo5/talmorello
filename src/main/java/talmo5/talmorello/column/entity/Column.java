@@ -43,8 +43,7 @@ public class Column extends BaseTime {
     this.orders = orders;
   }
 
-  public void updateTitle(String title) {
+  public void modifyColumnName(String title) {
     this.title = title;
   }
-
 }
