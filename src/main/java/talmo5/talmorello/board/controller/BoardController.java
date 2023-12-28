@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.service.BoardService;
 
@@ -19,7 +20,7 @@ public class BoardController {
     }
 
     @PatchMapping("/{boardId}")
-    public ResponseEntity<?> patchBoard(@Valid @RequestBody PostBoardDTO.Request requestDto, @PathVariable Long boardId){
+    public ResponseEntity<?> patchBoard(@Valid @RequestBody ModifyBoardDTO.Request requestDto, @PathVariable Long boardId){
         boardService.patchBoard(requestDto, boardId);
         return ResponseEntity.ok().body("수정 성공");
     }
