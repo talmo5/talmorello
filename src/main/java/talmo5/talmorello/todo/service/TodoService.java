@@ -40,4 +40,12 @@ public class TodoService {
 
         todo.updateTodo(requestDTO.todoContent());
     }
+
+    @Transactional
+    public void checkTodo(Long todoId, Long userId) {
+
+        Todo todo = todoRepository.findById(todoId).orElseThrow(TodoNotFoundException::new);
+
+        todo.check();
+    }
 }
