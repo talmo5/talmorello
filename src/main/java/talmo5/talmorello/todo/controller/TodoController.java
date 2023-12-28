@@ -3,6 +3,7 @@ package talmo5.talmorello.todo.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,15 @@ public class TodoController {
         todoService.uncheckTodo(todoId, userId);
 
         return ResponseEntity.ok("할일 체크 해제 성공");
+    }
+
+    @DeleteMapping("/{todoId}")
+    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId) {
+
+        Long userId = 1L;
+        todoService.deleteTodo(todoId, userId);
+
+        return ResponseEntity.ok("할일 삭제 성공");
     }
 
 }
