@@ -29,11 +29,13 @@ public class CardController {
             .username("dongha")
             .build();
 
-    @PostMapping
+    @PostMapping("/{columnId}")
     public ResponseEntity<CreateCardDTO.Response> createCard(
+            @PathVariable Long columnId,
             @RequestBody @Valid CreateCardDTO.Request createCardDTO) {
 
-        CreateCardDTO.Response responseDTO = cardService.createCard(createCardDTO, user.getId());
+        CreateCardDTO.Response responseDTO = cardService.createCard(createCardDTO, user.getId(),
+                columnId);
 
         return ResponseEntity.ok(responseDTO);
     }
