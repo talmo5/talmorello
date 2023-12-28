@@ -27,8 +27,7 @@ public class BoardService{
     @Transactional
     public void patchBoard(ModifyBoardDTO.Request requestDto, Long boardId) {
         Board board = findbyId(boardId);
-        String[] tc = ModifyBoardDTO.fill(requestDto, board);
-        board.update(tc[0], tc[1], requestDto.boardColor());
+        board.update(requestDto.title(), requestDto.content(), requestDto.boardColor());
     }
 
     private Board findbyId(Long boardId) {
