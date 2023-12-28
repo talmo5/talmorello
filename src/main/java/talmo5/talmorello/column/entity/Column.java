@@ -28,8 +28,10 @@ public class Column extends BaseTime {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @jakarta.persistence.Column(length = 50, nullable = false)
   private String title;
 
+  @jakarta.persistence.Column(nullable = false)
   private Integer orders;
 
   @JoinColumn(name = "board_id")
