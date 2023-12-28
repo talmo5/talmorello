@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.*;
 import talmo5.talmorello.auditing.BaseTime;
 import talmo5.talmorello.board.constant.BoardColor;
-import talmo5.talmorello.board.dto.PostBoardDTO;
 
 @Getter
 @Entity
@@ -30,4 +29,10 @@ public class Board extends BaseTime {
 
     @OneToMany
     private List<talmo5.talmorello.column.entity.Column> columns = new ArrayList<>();
+
+    public void update(String title, String content, BoardColor boardColor) {
+        if (!title.isBlank()) this.title = title;
+        if (!content.isBlank()) this.content = content;
+        this.boardColor = boardColor;
+    }
 }
