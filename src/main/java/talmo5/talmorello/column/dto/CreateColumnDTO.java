@@ -24,16 +24,18 @@ public class CreateColumnDTO {
   }
 
   @Builder
-  public record Response(Long columnId, String columnTitle, LocalDateTime createdAt) {
+  public record Response(Long columnId,
+                         String columnTitle,
+                         LocalDateTime createdAt) {
 
-    public static Response of(Column column) {
-
+    public static Response from(Column column) {
       return Response.builder()
               .columnId(column.getId())
               .columnTitle(column.getTitle())
               .createdAt(column.getCreatedAt())
               .build();
     }
+
   }
 }
 

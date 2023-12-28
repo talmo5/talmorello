@@ -31,7 +31,7 @@ public class ColumnService {
 
     columnRepository.save(column);
 
-    return CreateColumnDTO.Response.of(column);
+    return CreateColumnDTO.Response.from(column);
   }
 
   private int getLastOrders() {
