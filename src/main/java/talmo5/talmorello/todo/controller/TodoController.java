@@ -50,4 +50,13 @@ public class TodoController {
         return ResponseEntity.ok("할일 체크 성공");
     }
 
+    @PostMapping("{todoId}/uncheck")
+    public ResponseEntity<?> uncheckTodo(@PathVariable Long todoId) {
+
+        Long userId = 1L;
+        todoService.uncheckTodo(todoId, userId);
+
+        return ResponseEntity.ok("할일 체크 해제 성공");
+    }
+
 }
