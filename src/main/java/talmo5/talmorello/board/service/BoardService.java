@@ -16,7 +16,7 @@ public class BoardService{
     }
 
     private PostBoardDTO.Response buildBoard(PostBoardDTO.Request requestDto){
-        Board board = Board.buildBoard(requestDto);
+        Board board = PostBoardDTO.BoardBuild(requestDto);
         boardRepository.save(board);
         return PostBoardDTO.response(board);
     }

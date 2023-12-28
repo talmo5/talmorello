@@ -14,8 +14,14 @@ public class PostBoardDTO {
             @NotBlank @Length(max = 500)
             String content,
             @NotBlank
-            BoardColor boardColor) {
+            BoardColor boardColor) {}
 
+    public static Board BoardBuild(PostBoardDTO.Request request){
+        return Board.builder()
+                .title(request.title())
+                .content(request.content())
+                .boardColor(request.boardColor())
+                .build();
     }
 
     @Builder

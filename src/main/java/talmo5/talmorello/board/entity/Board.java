@@ -7,7 +7,6 @@ import lombok.*;
 import talmo5.talmorello.auditing.BaseTime;
 import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.board.dto.PostBoardDTO;
-import talmo5.talmorello.boarduser.entity.BoardUser;
 
 @Getter
 @Entity
@@ -31,12 +30,4 @@ public class Board extends BaseTime {
 
     @OneToMany
     private List<talmo5.talmorello.column.entity.Column> columns = new ArrayList<>();
-
-    public static Board buildBoard(PostBoardDTO.Request request){
-        return Board.builder()
-                .title(request.title())
-                .content(request.content())
-                .boardColor(request.boardColor())
-                .build();
-    }
 }
