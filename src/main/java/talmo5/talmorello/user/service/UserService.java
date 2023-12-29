@@ -24,7 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public SignupRequestDTO.Response signup(SignupRequestDTO.Request requestDto){
+    public SignupRequestDTO.Response signup(SignupRequestDTO.Request requestDto) {
         String username = requestDto.username();
         String password = passwordEncoder.encode(requestDto.password());
         String email = requestDto.email();
@@ -50,13 +50,13 @@ public class UserService {
         }
     }
 
-    public void login(LoginRequestDTO requestDto, HttpServletResponse res){
+    public void login(LoginRequestDTO requestDto, HttpServletResponse res) {
         String username = requestDto.username();
         String password = requestDto.password();
 
         User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        if (!passwordEncoder.matches(password, user.getPassword())){
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new PasswordMismatchedException();
         }
 
@@ -64,22 +64,13 @@ public class UserService {
         jwtUtil.addJwtToCookie(token, res);
     }
 
+
     public ResponseEntity<String> deleteUser(Long id) {
-        User user = findUser(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
 
-        if (user != null) {
-            userRepository.delete(user);
-            return ResponseEntity.ok("회원 삭제 완료! 삭제된 회원 ID: " + id);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 ID의 회원을 찾을 수 없습니다.");
-        }
+        userRepository.delete(user);
+        return ResponseEntity.ok("회원 삭제 완료! 삭제된 회원 ID: " + id);
     }
-
-    private User findUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 회원이 없습니다!")
-        );
-    }
-
 
 }
