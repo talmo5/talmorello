@@ -19,8 +19,7 @@ import talmo5.talmorello.user.constant.SocialType;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-//@Table(name = "users")
+@Table(name = "users")
 public class User extends BaseTime {
 
     @Id
