@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import talmo5.talmorello.user.dto.LoginRequestDto;
+import talmo5.talmorello.user.dto.LoginRequestDTO;
 import talmo5.talmorello.user.dto.SignupRequestDTO;
 import talmo5.talmorello.user.service.UserService;
 
@@ -28,12 +28,13 @@ public class UserController {
     }
 
     @PostMapping("/normal-users/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto,
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDto,
             HttpServletResponse res) {
 
         userService.login(requestDto, res);
 
         return ResponseEntity.ok("로그인 성공! 환영합니다!");
     }
+
 
 }
