@@ -1,15 +1,19 @@
 package talmo5.talmorello.board.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import talmo5.talmorello.board.dto.GetBoardDTO;
+import org.springframework.util.MultiValueMap;
 import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.board.repository.BoardRepository;
 import talmo5.talmorello.global.exception.board.BoardNotFoundException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardService{
@@ -39,9 +43,10 @@ public class BoardService{
         return boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
     }
 
-    public GetBoardDTO.Response getBoard(Long boardId) {
-        Board board = boardRepository.findByIdWithCatalogListAndCardList(boardId).orElseThrow(BoardNotFoundException::new);
-        return GetBoardDTO.buildResponse(board.getTitle(), board.getContent(), board.getBoardColor());
+    public List<Map<String,?>> getBoard(Long boardId) {
+//        List<Map<String, ?>> board = boardRepository.findByIdWithCatalogListAndCardList(boardId);
+        return boardRepository.findByIdWithCatalogListAndCardList(boardId);
+        //return GetBoardDTO.buildResponse(board.getTitle(), board.getContent(), board.getBoardColor());
     }
 }
 

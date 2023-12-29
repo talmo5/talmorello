@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import talmo5.talmorello.board.dto.GetBoardDTO;
 import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.service.BoardService;
@@ -34,8 +33,7 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<GetBoardDTO.Response> getBoard(@PathVariable Long boardId){
-        boardService.getBoard(boardId);
+    public ResponseEntity<?> getBoard(@PathVariable Long boardId){
         return ResponseEntity.ok().body(boardService.getBoard(boardId));
     }
 
