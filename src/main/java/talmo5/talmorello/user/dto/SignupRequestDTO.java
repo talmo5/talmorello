@@ -7,9 +7,28 @@ import talmo5.talmorello.user.entity.User;
 
 @Getter
 @Setter
-public class SignupRequestDto {
+public class SignupRequestDTO {
 
-    private String username;
-    private String password;
-    private String email;
+    public record Request(
+            String username,
+            String password,
+            String email) {
+
+
+    }
+
+    @Builder
+    public record Response(
+            Long userId,
+            String email,
+            String username
+    ){
+        public static Response from(User user){
+            return Response.builder()
+                    .userId(user.getId())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
+                    .build();
+        }
+    }
 }
