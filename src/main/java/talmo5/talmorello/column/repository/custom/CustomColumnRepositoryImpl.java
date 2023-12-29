@@ -62,6 +62,21 @@ public class CustomColumnRepositoryImpl implements CustomColumnRepository {
   }
 
   @Override
+  public void subtractOrders(Long boardId, int orders) {
+    /*
+    UPDATE Column SET orders = orders - 1
+    WHERE orders >= orders
+     */
+    jpaQueryFactory.
+            update(column)
+            .set(column.orders, column.orders.subtract(1))
+            .where(column.board.id.eq(boardId),
+                    column.orders.goe(orders)
+            )
+            .execute();
+  }
+
+  @Override
   public void fetchJoinColumn(Long columnId) {
     jpaQueryFactory.
             selectFrom(column)

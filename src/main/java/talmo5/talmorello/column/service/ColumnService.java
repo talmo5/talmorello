@@ -78,6 +78,16 @@ public class ColumnService {
     column.changeOrders(newOrders);
   }
 
+  @Transactional
+  public void deleteColumn(Long columnId) {
+
+    Column column = getColumn(columnId);
+
+    columnRepository.subtractOrders(column.getBoard().getId(), column.getOrders());
+    columnRepository.deleteById(columnId);
+  }
+
+
   public Column getColumn(Long columnId) {
     return columnRepository.findById(columnId).orElseThrow(
             ColumnNotFoundException::new);

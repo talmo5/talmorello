@@ -3,6 +3,7 @@ package talmo5.talmorello.column.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,5 +58,14 @@ public class ColumnController {
     return ResponseEntity.ok("컬럼 이동 성공");
   }
 
+  // 컬럼 삭제
+  @DeleteMapping("/{columnId}")
+  public ResponseEntity<String> deleteColumn(
+          @PathVariable Long columnId
+  ) {
+    columnService.deleteColumn(columnId);
+
+    return ResponseEntity.ok("컬럼 삭제 성공");
+  }
 
 }
