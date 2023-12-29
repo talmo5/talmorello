@@ -20,7 +20,6 @@ import talmo5.talmorello.column.service.ColumnService;
 public class ColumnController {
 
   private final ColumnService columnService;
-  private final ColumnRepository columnRepository;
 
   @PostMapping("/boards/{boardId}")
   public ResponseEntity<CreateColumnDTO.Response> createColumn(
@@ -47,7 +46,7 @@ public class ColumnController {
     return ResponseEntity.ok(responseDTO);
   }
 
-  // 컬럼 이동 changeColumn
+  // 컬럼 이동
   @PatchMapping("/{columnId}/order/{columnOrders}")
   public ResponseEntity<String> changeColumn(
           @PathVariable Long columnId,
