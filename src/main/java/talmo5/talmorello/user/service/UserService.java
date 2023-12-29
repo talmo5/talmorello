@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import talmo5.talmorello.global.exception.user.PasswordMismatchedException;
 import talmo5.talmorello.global.exception.user.UserAlreadyExistException;
 import talmo5.talmorello.global.exception.user.UserNotFoundException;
-import talmo5.talmorello.user.dto.LoginRequestDto;
+import talmo5.talmorello.user.dto.LoginRequestDTO;
 import talmo5.talmorello.user.dto.SignupRequestDTO;
 import talmo5.talmorello.user.entity.User;
 import talmo5.talmorello.user.jwt.JwtUtil;
@@ -30,7 +30,9 @@ public class UserService {
         validateDuplication(username, email);
 
         User user = User.createUser(email, username, password);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        return SignupRequestDTO.Response.from(savedUser);
     }
 
     public void validateDuplication(String username, String email) {
@@ -46,9 +48,9 @@ public class UserService {
         }
     }
 
-    public void login(LoginRequestDto requestDto, HttpServletResponse res){
-        String username = requestDto.getUsername();
-        String password = requestDto.getPassword();
+    public void login(LoginRequestDTO requestDto, HttpServletResponse res){
+        String username = requestDto.username();
+        String password = requestDto.password();
 
         User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
