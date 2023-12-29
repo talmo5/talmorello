@@ -27,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String tokenValue = jwtUtil.getTokenFromRequest(req);
 
-        if (StringUtils.hasText(tokenValue)) {
+        if (!StringUtils.hasText(tokenValue)) {
             throw new IllegalArgumentException("Not Found Token");
         }
 
@@ -46,7 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        String[] excludePath = {"/api/normal-users/signup", "/api/normal-users/login","/api/normal-users/delete"};
+        String[] excludePath = {"/api/normal-users/signup", "/api/normal-users/login"};
 
         String url = request.getRequestURI();
 
