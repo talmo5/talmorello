@@ -3,6 +3,7 @@ package talmo5.talmorello.board.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import talmo5.talmorello.board.dto.GetBoardDTO;
 import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.entity.Board;
@@ -14,14 +15,13 @@ import talmo5.talmorello.global.exception.board.BoardNotFoundException;
 public class BoardService{
     private final BoardRepository boardRepository;
 
-    public PostBoardDTO.Response postBoard(PostBoardDTO.Request requestDto) {
-        return buildBoard(requestDto);
+    public void postBoard(PostBoardDTO.Request requestDto) {
+        buildBoard(requestDto);
     }
 
-    private PostBoardDTO.Response buildBoard(PostBoardDTO.Request requestDto){
+    private void buildBoard(PostBoardDTO.Request requestDto){
         Board board = PostBoardDTO.BoardBuild(requestDto);
         boardRepository.save(board);
-        return PostBoardDTO.response(board);
     }
 
     @Transactional
@@ -37,6 +37,11 @@ public class BoardService{
 
     private Board findbyId(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+    }
+
+    public GetBoardDTO.Response getBoard(Long boardId) {
+        Board board = boardRepository.findByIdWithCatalogListAndCardList(boardId).orElseThrow(BoardNotFoundException::new);
+        return GetBoardDTO.buildResponse(board.getTitle(), board.getContent(), board.getBoardColor());
     }
 }
 
