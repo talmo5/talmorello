@@ -3,6 +3,8 @@ package talmo5.talmorello.user.service;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import talmo5.talmorello.global.exception.user.PasswordMismatchedException;
@@ -62,6 +64,22 @@ public class UserService {
         jwtUtil.addJwtToCookie(token, res);
     }
 
+    public ResponseEntity<String> deleteUser(Long id) {
+        User user = findUser(id);
+
+        if (user != null) {
+            userRepository.delete(user);
+            return ResponseEntity.ok("회원 삭제 완료! 삭제된 회원 ID: " + id);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 ID의 회원을 찾을 수 없습니다.");
+        }
+    }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 회원이 없습니다!")
+        );
+    }
 
 
 }

@@ -3,6 +3,8 @@ package talmo5.talmorello.user.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +38,8 @@ public class UserController {
         return ResponseEntity.ok("로그인 성공! 환영합니다!");
     }
 
-
+    @DeleteMapping("/normal-users/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        return userService.deleteUser(id);
+    }
 }
