@@ -83,6 +83,8 @@ public class ColumnService {
 
     Column column = getColumn(columnId);
 
+    columnRepository.fetchJoinColumn(columnId);
+
     columnRepository.subtractOrders(column.getBoard().getId(), column.getOrders());
     columnRepository.deleteById(columnId);
   }
