@@ -4,13 +4,15 @@ import static talmo5.talmorello.board.entity.QBoard.board;
 import static talmo5.talmorello.column.entity.QColumn.column;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import talmo5.talmorello.board.entity.Board;
 
 @RequiredArgsConstructor
 public class CustomColumnRepositoryImpl implements CustomColumnRepository {
 
   private final JPAQueryFactory jpaQueryFactory;
+
+  private final EntityManager em;
 
 
   @Override
@@ -27,6 +29,13 @@ public class CustomColumnRepositoryImpl implements CustomColumnRepository {
                     column.orders.gt(oldOrders)
             )
             .execute();
+
+    jpaQueryFactory.update(column)
+            .set(column.orders, newOrders)
+            .where(column.id.eq(columnId))
+            .execute();
+
+    em.clear();
   }
 
   @Override
@@ -43,6 +52,13 @@ public class CustomColumnRepositoryImpl implements CustomColumnRepository {
                     column.orders.lt(oldOrders)
             )
             .execute();
+
+    jpaQueryFactory.update(column)
+            .set(column.orders, newOrders)
+            .where(column.id.eq(columnId))
+            .execute();
+
+    em.clear();
   }
 
   @Override
