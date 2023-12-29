@@ -5,19 +5,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.board.entity.Board;
-import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.column.dto.CreateColumnDTO;
 import talmo5.talmorello.column.dto.CreateColumnDTO.Response;
-import talmo5.talmorello.column.dto.ModifyColumnDTO;
 import talmo5.talmorello.column.entity.Column;
 import talmo5.talmorello.column.repository.ColumnRepository;
 import talmo5.talmorello.global.exception.column.ColumnNotFoundException;
+import talmo5.talmorello.global.exception.column.InvalidNewOrdersException;
 
 @Service
 @RequiredArgsConstructor
 public class ColumnService {
 
   private final ColumnRepository columnRepository;
+  private static final int ORDER_MIN_VALUE = 1;
 
   private Board board = Board.builder()
           .id(1L)
@@ -56,17 +56,19 @@ public class ColumnService {
   }
 
   @Transactional
-  public void changeColumn(Long columnId, int columnOrders) {
+  public void changeColumn(Long columnId, int newOrders) {
 
     Column column = getColumn(columnId);
+
+    columnRepository.fetchJoinColumn(columnId);
 
     int oldOrders = column.getOrders();
     int newOrders = columnOrders;
 
     if (newOrders > oldOrders) {
-      columnRepository.addOneToColumnOrders(board, newOrders, oldOrders);
+      columnRepository.subtractOneToColumnOrders(column.getBoard().getId(), columnId, newOrders, oldOrders);
     } else {
-      columnRepository.subtractOneToColumnOrders(board, newOrders, oldOrders);
+      columnRepository.addOneToColumnOrders(column.getBoard().getId(), columnId, newOrders, oldOrders);
     }
     column.changeOrders(columnOrders);
   }
