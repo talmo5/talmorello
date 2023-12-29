@@ -63,14 +63,19 @@ public class ColumnService {
     columnRepository.fetchJoinColumn(columnId);
 
     int oldOrders = column.getOrders();
-    int newOrders = columnOrders;
+
+
+    if(newOrders > columnRepository.orderCount() || newOrders < ORDER_MIN_VALUE) {
+      throw new InvalidNewOrdersException();
+    }
+
 
     if (newOrders > oldOrders) {
       columnRepository.subtractOneToColumnOrders(column.getBoard().getId(), columnId, newOrders, oldOrders);
     } else {
       columnRepository.addOneToColumnOrders(column.getBoard().getId(), columnId, newOrders, oldOrders);
     }
-    column.changeOrders(columnOrders);
+    column.changeOrders(newOrders);
   }
 
   public Column getColumn(Long columnId) {
