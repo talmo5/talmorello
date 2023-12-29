@@ -5,15 +5,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import talmo5.talmorello.user.entity.User;
 import talmo5.talmorello.user.jwt.JwtUtil;
-import talmo5.talmorello.user.repository.UserRepository;
 
 @Slf4j(topic = "JwtAuthFilter")
 @Component
@@ -22,23 +21,16 @@ import talmo5.talmorello.user.repository.UserRepository;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String url = req.getRequestURI();
-
-        if (StringUtils.hasText(url) &&
-                (url.startsWith("/api/normal-users") || url.startsWith("/css") || url.startsWith("/js"))
-        ) {
-            filterChain.doFilter(req, res);
-        } else {
-
             String tokenValue = jwtUtil.getTokenFromRequest(req);
 
-            if (StringUtils.hasText(tokenValue)) {
+        if (StringUtils.hasText(tokenValue)) {
+            throw new IllegalArgumentException("Not Found Token");
+        }
 
                 String token = jwtUtil.substringToken(tokenValue);
 
@@ -58,5 +50,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 throw new IllegalArgumentException("Not Found Token");
             }
         }
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
+        String[] excludePath = {"/api/normal-users/signup", "/api/normal-users/login"};
+
+        String url = request.getRequestURI();
+
+        return Arrays.stream(excludePath).anyMatch(url::startsWith);
     }
 }
