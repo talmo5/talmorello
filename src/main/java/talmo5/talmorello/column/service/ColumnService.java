@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.board.entity.Board;
+import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.column.dto.CreateColumnDTO;
 import talmo5.talmorello.column.dto.CreateColumnDTO.Response;
 import talmo5.talmorello.column.dto.ModifyColumnDTO;
@@ -46,13 +47,11 @@ public class ColumnService {
   }
 
   @Transactional
-  public ModifyColumnDTO.Response modifyColumnName(Long columnId, ModifyColumnDTO.Request modifyColumnDTO) {
+  public void modifyColumnName(Long columnId, String columnTitle) {
 
     Column column = getColumn(columnId);
 
-    column.modifyColumnName(modifyColumnDTO.columnTitle());
-
-    return ModifyColumnDTO.Response.from(column);
+    column.modifyColumnName(columnTitle);
 
   }
 

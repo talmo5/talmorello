@@ -36,14 +36,13 @@ public class ColumnController {
 
   // 컬럼 이름 수정
   @PatchMapping("/{columnId}")
-  public ResponseEntity<ModifyColumnDTO.Response> modifyColumnName(
+  public ResponseEntity<String> modifyColumnName(
           @PathVariable Long columnId,
-          @RequestBody @Valid ModifyColumnDTO.Request modifyColumnDTO
+          @RequestBody @Valid ModifyColumnDTO modifyColumnDTO
   ) {
-    ModifyColumnDTO.Response responseDTO = columnService.modifyColumnName(columnId,
-            modifyColumnDTO);
+    columnService.modifyColumnName(columnId, modifyColumnDTO.columnTitle());
 
-    return ResponseEntity.ok(responseDTO);
+    return ResponseEntity.ok("컬럼 이름 수정 성공");
   }
 
   // 컬럼 이동
