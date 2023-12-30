@@ -64,8 +64,8 @@ public class Card extends BaseTime {
         this.content = cardDescription;
     }
 
-    public void changeColumnOfCard( talmo5.talmorello.column.entity.Column column, Integer orders) {
-        this.column = column;
-        this.orders = orders;
+    public void changeCardDate(LocalDateTime startDate, LocalDateTime dueDate) {
+        this.startDate = startDate;
+        this.dueDate = dueDate;
     }
 }

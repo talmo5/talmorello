@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.card.dto.CreateCardDTO;
+import talmo5.talmorello.card.dto.ModifyCardDateDTO;
 import talmo5.talmorello.card.dto.ModifyCardDescriptionDTO;
 import talmo5.talmorello.card.dto.ModifyCardTitleDTO;
 import talmo5.talmorello.card.service.CardService;
@@ -83,5 +84,14 @@ public class CardController {
         cardService.deleteCardUser(cardId, userId);
 
         return ResponseEntity.ok("카드 유저 삭제 완료");
+    }
+
+    @PatchMapping("/{cardId}/date")
+    public ResponseEntity<String> modifyCardDate(@PathVariable Long cardId,
+            @RequestBody @Valid ModifyCardDateDTO modifyCardDateDTO) {
+
+        cardService.modifyCardDate(cardId, modifyCardDateDTO);
+
+        return ResponseEntity.ok("카드 날짜 수정 성공");
     }
 }

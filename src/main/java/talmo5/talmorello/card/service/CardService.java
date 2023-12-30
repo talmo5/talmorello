@@ -1,6 +1,7 @@
 package talmo5.talmorello.card.service;
 
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import talmo5.talmorello.card.dto.CreateCardDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO.Request;
 import talmo5.talmorello.card.dto.CreateCardDTO.Response;
+import talmo5.talmorello.card.dto.ModifyCardDateDTO;
 import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.card.repository.CardRepository;
 import talmo5.talmorello.carduser.entity.CardUser;
@@ -128,5 +130,15 @@ public class CardService {
         CardUser cardUser = CardUser.makeCardUser(card, tmpUser);
 
         cardUserRepository.delete(cardUser);
+    }
+
+    @Transactional
+    public void modifyCardDate(Long cardId, ModifyCardDateDTO modifyCardDateDTO) {
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+
+        LocalDateTime startDate = modifyCardDateDTO.startDate();
+        LocalDateTime dueDate = modifyCardDateDTO.dueDate();
+        card.changeCardDate(startDate, dueDate);
     }
 }
