@@ -27,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String tokenValue = jwtUtil.getTokenFromRequest(req);
 
-        if (StringUtils.hasText(tokenValue)) {
+        if (!StringUtils.hasText(tokenValue)) {
             throw new IllegalArgumentException("Not Found Token");
         }
 
@@ -37,9 +37,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throw new IllegalArgumentException("Token Error");
         }
 
-        Long userId = jwtUtil.getUserIdFromToken(token);
-
-        req.setAttribute("userId", userId);
         filterChain.doFilter(req, res);
     }
 
