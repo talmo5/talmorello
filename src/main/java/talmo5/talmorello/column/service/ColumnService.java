@@ -58,7 +58,7 @@ public class ColumnService {
   @Transactional
   public void changeColumn(Long columnId, int newOrders) {
 
-    Column column = columnRepository.fetchJoinColumn(columnId).orElseThrow(ColumnNotFoundException::new);
+    Column column = columnRepository.getColumnWithBoard(columnId).orElseThrow(ColumnNotFoundException::new);
 
     int oldOrders = column.getOrders();
 

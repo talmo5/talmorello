@@ -79,9 +79,10 @@ public class CustomColumnRepositoryImpl implements CustomColumnRepository {
   }
 
   @Override
-  public Optional<Column> fetchJoinColumn(Long columnId) {
-    return Optional.ofNullable(jpaQueryFactory
-            .selectFrom(column)
+  public Optional<Column> getColumnWithBoard(Long columnId) {
+
+    return Optional.ofNullable(jpaQueryFactory.
+            selectFrom(column)
             .join(column.board, board).fetchJoin()
             .where(column.id.eq(columnId))
             .fetchOne());

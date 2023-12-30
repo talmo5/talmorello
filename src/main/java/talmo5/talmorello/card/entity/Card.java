@@ -68,4 +68,8 @@ public class Card extends BaseTime {
         this.startDate = startDate;
         this.dueDate = dueDate;
     }
+
+    public void changePriority(Priority priority) {
+        this.priority = priority;
+    }
 }
