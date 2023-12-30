@@ -15,6 +15,7 @@ import talmo5.talmorello.carduser.repository.CardUserRepository;
 import talmo5.talmorello.column.entity.Column;
 import talmo5.talmorello.global.exception.card.AlreadyUserOfCardException;
 import talmo5.talmorello.global.exception.card.CardNotFoundException;
+import talmo5.talmorello.global.exception.column.InvalidNewOrdersException;
 import talmo5.talmorello.user.entity.User;
 
 @Service
@@ -42,21 +43,21 @@ public class CardService {
         //User user = userService.findUserById(userId);
         //Column column = columnService.findColumnById(columnId);
 
-        int orders = getLastOrders();
+        Long orders = getLastOrders(columnId);
 
         Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), tmpUser,
-                orders + 1, tmpColumn);
+                Math.toIntExact(orders + 1), tmpColumn);
 
         cardRepository.save(card);
 
         return CreateCardDTO.Response.of(card);
     }
 
-    private int getLastOrders() {
+    private Long getLastOrders(Long columnId) {
 
-        Integer orders = cardRepository.getLastOrders();
+        Long orders = cardRepository.getMaxOrderOfColumnByColumId(columnId);
 
-        if(orders == null) return 0;
+        if(orders == null) return 0L;
 
         return orders;
     }
@@ -80,13 +81,22 @@ public class CardService {
     @Transactional
     public void changeColumnOfCard(Long cardId, Long columnId, int cardOrders) {
 
-        //Column column = columnService.findColumById(columnId);
+//        Column column = columnService.findColumById(columnId);
 
-        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        //column 비교를 위해 fetch join
+        Card card = cardRepository.fetchJoinCard(cardId).orElseThrow(CardNotFoundException::new);
 
-        cardRepository.addOneToCardOrders(cardOrders, tmpColumn);
+        //컬럼 변경하라고 했는데 같은 컬럼으로 변경한다고 하면 exception 던지기
+        //추후 그냥 카드 순서 변경으로 되게끔 할 수도 있음 그래서 일단 에러코드 안 만들어씃ㅂ니ㅏㄷ..
+        if(card.getColumn().getId().equals(columnId)) {
+            throw new AlreadyUserOfCardException();
+        }
 
-        card.changeColumnOfCard(tmpColumn, cardOrders);
+        if(cardOrders < 1 || cardOrders > cardRepository.getMaxOrderOfColumnByColumId(columnId)) {
+            throw new InvalidNewOrdersException();
+        }
+
+        cardRepository.changeColumnOfCard(cardOrders, cardId, tmpColumn);
     }
 
     public void addUserToCard(Long cardId, Long userId) {
