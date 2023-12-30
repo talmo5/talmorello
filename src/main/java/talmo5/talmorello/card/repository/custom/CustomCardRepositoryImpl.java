@@ -1,5 +1,6 @@
 package talmo5.talmorello.card.repository.custom;
 
+import static talmo5.talmorello.board.entity.QBoard.board;
 import static talmo5.talmorello.card.entity.QCard.card;
 import static talmo5.talmorello.column.entity.QColumn.column;
 
@@ -7,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.column.entity.Column;
 
@@ -38,7 +40,7 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
     }
 
     @Override
-    public Optional<Card> fetchJoinCard(Long cardId) {
+    public Optional<Card> getCardWithColumn(Long cardId) {
 
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(card)
@@ -48,12 +50,24 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
     }
 
     @Override
-    public Long getMaxOrderOfColumnByColumId(Long columId) {
+    public Long getMaxOrderOfCardByColumnId(Long columnId) {
 
         return jpaQueryFactory
-                .select(column.orders.count())
-                .from(column)
-                .where(column.id.eq(columId))
+                .select(card.orders.count())
+                .from(card)
+                .where(card.column.id.eq(columnId))
                 .fetchOne();
+    }
+
+    @Override
+    public Optional<Board> getBoardByCardId(Long cardId) {
+
+        return Optional.ofNullable(jpaQueryFactory
+                .select(board)
+                .from(card)
+                .join(column).on(card.column.id.eq(column.id))
+                .join(board).on(column.board.id.eq(board.id))
+                .where(card.id.eq(cardId))
+                .fetchOne());
     }
 }
