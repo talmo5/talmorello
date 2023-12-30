@@ -60,11 +60,11 @@ public class CardController {
         return ResponseEntity.ok("카드 내용 수정 성공");
     }
 
-    @PatchMapping("/{cardId}/order/{cardOrders}/columns/{columnId}")
+    @PatchMapping("/{cardId}/order/{cardOrders}/columns/{newColumnId}")
     public ResponseEntity<String> changeColumnOfCard(@PathVariable Long cardId,
-            @PathVariable int cardOrders, @PathVariable Long columnId) {
+            @PathVariable int cardOrders, @PathVariable Long newColumnId) {
 
-        cardService.changeColumnOfCard(cardId, cardOrders, columnId);
+        cardService.changeColumnOfCard(cardId, cardOrders, newColumnId);
 
         return ResponseEntity.ok("카드 컬럼 변경 성공");
     }
@@ -96,7 +96,7 @@ public class CardController {
         return ResponseEntity.ok("카드 날짜 수정 성공");
     }
 
-    @PatchMapping("/{cardId}/boards/{boardId}/priority")
+    @PatchMapping("/{cardId}/priority")
     public ResponseEntity<String> modifyCardPriority(
             @PathVariable Long cardId,
             @RequestParam("priority") Priority priority,
