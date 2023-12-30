@@ -60,7 +60,7 @@ public class ColumnService {
 
     Column column = getColumn(columnId);
 
-    columnRepository.fetchJoinColumn(columnId);
+    columnRepository.getColumnWithBoard(columnId);
 
     int oldOrders = column.getOrders();
 
