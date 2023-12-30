@@ -5,7 +5,9 @@ import static talmo5.talmorello.column.entity.QColumn.column;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import talmo5.talmorello.column.entity.Column;
 
 @RequiredArgsConstructor
 public class CustomColumnRepositoryImpl implements CustomColumnRepository {
@@ -77,12 +79,12 @@ public class CustomColumnRepositoryImpl implements CustomColumnRepository {
   }
 
   @Override
-  public void fetchJoinColumn(Long columnId) {
-    jpaQueryFactory.
-            selectFrom(column)
+  public Optional<Column> fetchJoinColumn(Long columnId) {
+    return Optional.ofNullable(jpaQueryFactory
+            .selectFrom(column)
             .join(column.board, board).fetchJoin()
             .where(column.id.eq(columnId))
-            .fetchOne();
+            .fetchOne());
   }
 
   @Override

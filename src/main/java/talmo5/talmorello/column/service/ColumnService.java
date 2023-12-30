@@ -49,7 +49,7 @@ public class ColumnService {
   @Transactional
   public void modifyColumnName(Long columnId, String columnTitle) {
 
-    Column column = getColumn(columnId);
+    Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
 
     column.modifyColumnName(columnTitle);
 
@@ -58,17 +58,13 @@ public class ColumnService {
   @Transactional
   public void changeColumn(Long columnId, int newOrders) {
 
-    Column column = getColumn(columnId);
-
-    columnRepository.fetchJoinColumn(columnId);
+    Column column = columnRepository.fetchJoinColumn(columnId).orElseThrow(ColumnNotFoundException::new);
 
     int oldOrders = column.getOrders();
-
 
     if(newOrders > columnRepository.orderCount() || newOrders < ORDER_MIN_VALUE) {
       throw new InvalidNewOrdersException();
     }
-
 
     if (newOrders > oldOrders) {
       columnRepository.subtractOneToColumnOrders(column.getBoard().getId(), columnId, newOrders, oldOrders);
@@ -81,19 +77,12 @@ public class ColumnService {
   @Transactional
   public void deleteColumn(Long columnId) {
 
-    Column column = getColumn(columnId);
-
-    columnRepository.fetchJoinColumn(columnId);
+    Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
 
     columnRepository.subtractOrders(column.getBoard().getId(), column.getOrders());
-    columnRepository.deleteById(columnId);
+    columnRepository.delete(column);
   }
 
-
-  public Column getColumn(Long columnId) {
-    return columnRepository.findById(columnId).orElseThrow(
-            ColumnNotFoundException::new);
-    }
 
   }
 
