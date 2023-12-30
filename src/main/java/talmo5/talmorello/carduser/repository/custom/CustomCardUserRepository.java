@@ -10,4 +10,6 @@ public interface CustomCardUserRepository {
     List<User> findUsersByCardId(Long cardId);
 
     Optional<CardUser> findCardUserByCardIdAndUserId(Long cardId, Long userId);
+
+    public void deleteAllCardUserByCardId(Long cardId);
 }

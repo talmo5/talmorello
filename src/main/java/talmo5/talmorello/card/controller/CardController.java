@@ -106,4 +106,12 @@ public class CardController {
 
         return ResponseEntity.ok("카드 우선순위 수정 성공");
     }
+
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<String> deleteCard(@PathVariable Long cardId, @LoginUserId Long userId) {
+
+        cardService.deleteCard(cardId, userId);
+
+        return ResponseEntity.ok("카드 삭제 성공");
+    }
 }
