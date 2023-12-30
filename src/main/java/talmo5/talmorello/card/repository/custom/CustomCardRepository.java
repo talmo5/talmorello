@@ -7,11 +7,13 @@ import talmo5.talmorello.column.entity.Column;
 
 public interface CustomCardRepository {
 
-    public void changeColumnOfCard(int order, Long cardId, Column column);
+    void changeColumnOfCard(int order, Long cardId, Column column);
 
-    public Optional<Card> getCardWithColumn(Long cardId);
+    Optional<Card> getCardWithColumn(Long cardId);
 
-    public Long getMaxOrderOfCardByColumnId(Long columnId);
+    Long getMaxOrderOfCardByColumnId(Long columnId);
 
-    public Optional<Board> getBoardByCardId(Long cardId);
+    Optional<Board> getBoardByCardId(Long cardId);
+
+    void deleteCard(Card card, Column column);
 }

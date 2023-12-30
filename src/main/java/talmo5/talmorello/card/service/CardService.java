@@ -173,4 +173,16 @@ public class CardService {
 
         card.changePriority(priority);
     }
+
+    @Transactional
+    public void deleteCard(Long cardId, Long userId) {
+
+        Card card = cardRepository.getCardWithColumn(cardId).orElseThrow(CardNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+
+        cardUserRepository.deleteAllCardUserByCardId(card.getId());
+
+        cardRepository.deleteCard(card, card.getColumn());
+    }
 }

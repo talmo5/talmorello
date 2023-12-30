@@ -10,7 +10,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.card.entity.Card;
+import talmo5.talmorello.card.entity.QCard;
 import talmo5.talmorello.column.entity.Column;
+import talmo5.talmorello.column.entity.QColumn;
 
 @RequiredArgsConstructor
 public class CustomCardRepositoryImpl implements CustomCardRepository{
@@ -36,6 +38,7 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
                 .where(card.id.eq(cardId))
                 .execute();
 
+        em.flush();
         em.clear();
     }
 
@@ -69,5 +72,24 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
                 .join(board).on(column.board.id.eq(board.id))
                 .where(card.id.eq(cardId))
                 .fetchOne());
+    }
+
+    @Override
+    public void deleteCard(Card card, Column column) {
+
+        jpaQueryFactory
+                .update(QCard.card)
+                .set(QCard.card.orders, QCard.card.orders.subtract(1))
+                .where(QColumn.column.eq(column),
+                        QCard.card.orders.gt(card.getOrders()))
+                .execute();
+
+        jpaQueryFactory
+                .delete(QCard.card)
+                .where(QCard.card.eq(card))
+                .execute();
+
+        em.flush();
+        em.clear();
     }
 }
