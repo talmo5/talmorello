@@ -16,4 +16,6 @@ public interface CustomCardRepository {
     Optional<Board> getBoardByCardId(Long cardId);
 
     void deleteCard(Card card, Column column);
+
+    void changeOrders(Long cardId, Long columnId, int newOrders, int oldOrders);
 }

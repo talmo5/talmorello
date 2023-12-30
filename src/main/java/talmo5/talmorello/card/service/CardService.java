@@ -87,15 +87,30 @@ public class CardService {
     }
 
     @Transactional
-    public void changeColumnOfCard(Long cardId, int cardOrders, Long columnId) {
+    public void changeOrder(Long cardId, int newOrders, Long userId) {
 
-//        Column column = columnService.findColumById(columnId);
+        Card card = cardRepository.getCardWithColumn(cardId).orElseThrow(CardNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+        Long maxOrders = cardRepository.getMaxOrderOfCardByColumnId(card.getColumn().getId());
+
+        //현재 컬럼 내에서 유효한 오더인지 검사
+        if(newOrders < 1 || newOrders > maxOrders) {
+            throw new InvalidNewOrdersException();
+        }
+
+        cardRepository.changeOrders(cardId, card.getColumn().getId(), newOrders, card.getOrders());
+    }
+
+    @Transactional
+    public void changeColumnOfCard(Long cardId, int cardOrders, Long columnId, Long userId) {
 
         //column 비교를 위해 fetch join
         Card card = cardRepository.getCardWithColumn(cardId).orElseThrow(CardNotFoundException::new);
         Column column = columnRepository.getColumnWithBoard(columnId)
                 .orElseThrow(ColumnNotFoundException::new);
         Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         //내가 이동하려는 컬럼의 아이디가 현재 보드가 아니면?
         if(!column.getBoard().getId().equals(board.getId())) {
