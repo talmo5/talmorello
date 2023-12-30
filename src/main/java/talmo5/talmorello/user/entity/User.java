@@ -37,12 +37,28 @@ public class User extends BaseTime {
 
     private SocialType socialType;
 
+    private Long kakaoId;
+
     public static User createUser(String email, String username, String password) {
         return User.builder()
                 .email(email)
                 .username(username)
                 .password(password)
                 .build();
+    }
+    public static User createKakaoUser(String username, String password, String email, Long kakaoId) {
+        return User.builder()
+                .username(username)
+                .password(password)
+                .email(email)
+                .kakaoId(kakaoId)
+                .socialType(SocialType.KAKAO)
+                .build();
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
 

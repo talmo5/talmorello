@@ -29,19 +29,14 @@ public class JwtUtil {
 
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    // 사용자 권한 값의 KEY
-    public static final String AUTHORIZATION_KEY = "auth";
-    // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
-    // 토큰 만료시간
     private long TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
-    @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
+    @Value("${jwt.secret.key}") // Base64 Encode
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-    // 로그 설정
     public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
 
     @PostConstruct
@@ -85,7 +80,7 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);//위변조, 만료 검증
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             logger.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
@@ -109,7 +104,6 @@ public class JwtUtil {
                 Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()
                         .getAudience());
     }
-    //  Cookie Value : JWT 가져오기
 
     public String getTokenFromRequest(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
@@ -117,7 +111,7 @@ public class JwtUtil {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
                     try {
-                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+                        return URLDecoder.decode(cookie.getValue(), "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         throw new RuntimeException("Fail");
                     }

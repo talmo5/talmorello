@@ -1,16 +1,20 @@
 package talmo5.talmorello.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.user.dto.LoginRequestDTO;
 import talmo5.talmorello.user.dto.SignupRequestDTO;
+import talmo5.talmorello.user.service.KakaoService;
 import talmo5.talmorello.user.service.UserService;
 
 @RestController
@@ -19,6 +23,7 @@ import talmo5.talmorello.user.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final KakaoService kakaoService;
 
     @PostMapping("/normal-users/signup")
     public ResponseEntity<SignupRequestDTO.Response> signup(
@@ -41,5 +46,11 @@ public class UserController {
     @DeleteMapping("/normal-users/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
+    }
+
+    @GetMapping("/login/kakao")
+    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse res)  throws JsonProcessingException {
+        kakaoService.kakaoLogin(code, res);
+        return ResponseEntity.ok("카카오 로그인 성공! 환영합니다!");
     }
 }
