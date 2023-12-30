@@ -2,11 +2,10 @@ package talmo5.talmorello.board.service;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
+import talmo5.talmorello.board.dto.GetBoardDTO;
 import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.entity.Board;
@@ -43,10 +42,8 @@ public class BoardService{
         return boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
     }
 
-    public List<Map<String,?>> getBoard(Long boardId) {
-//        List<Map<String, ?>> board = boardRepository.findByIdWithCatalogListAndCardList(boardId);
+    public List<GetBoardDTO.Response> getBoard(Long boardId) {
         return boardRepository.findByIdWithCatalogListAndCardList(boardId);
-        //return GetBoardDTO.buildResponse(board.getTitle(), board.getContent(), board.getBoardColor());
     }
 }
 

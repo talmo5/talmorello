@@ -45,4 +45,8 @@ public class Card extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
+    @JoinColumn(name = "column_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private talmo5.talmorello.column.entity.Column column;
+
 }
