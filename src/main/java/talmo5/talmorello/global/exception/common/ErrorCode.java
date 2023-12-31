@@ -35,12 +35,16 @@ public enum ErrorCode {
     // Column
     NOT_FOUND_COLUMN_EXCEPTION(401, "해당 컬럼을 찾을 수 없습니다."),
     INVALID_ORDER_EXCEPTION(401, "변경할 수 없는 순서입니다."),
+    INVALID_NEW_ORDERS_EXCEPTION(401, "변경할 수 없는 순서입니다."),
 
     // Card
     NOT_FOUND_CARD_EXCEPTION(401, "해당 카드를 찾을 수 없습니다."),
     NOT_MATCHING_DATE_FORM_EXCEPTION(400, "올바른 형식의 날짜 형식이 아닙니다."),
     DATE_IS_AHEAD_OF_CURRENT_TIME_EXCEPTION(400, "현재 시점 이전의 날짜가 입력되었습니다. 유효한 날짜를 입력해주세요"),
     EXPIRATION_DATE_IS_AHEAD_OF_START_DATE_EXCEPTION(400, "마감일이 시작일보다 앞섭니다. 유효한 날짜를 입력해주세요."),
+    ALREADY_MEMBER_OF_CARD_EXCEPTION(400, "이미 카드의 멤버인 회원입니다."),
+    NOT_MEMBER_OF_CARD_EXCEPTION(400, "카드의 멤버가 아닙니다"),
+
 
     // Comment
     NOT_FOUND_COMMENT_EXCEPTION(401, "해당 댓글을 찾을 수 없습니다."),
