@@ -1,9 +1,11 @@
 package talmo5.talmorello.board.dto;
 
 import java.util.List;
+import lombok.Builder;
 import talmo5.talmorello.board.constant.BoardColor;
 
 public class GetBoardDTO {
+    @Builder
     public record Response(
             Long boardId,
             String boardTitle,
@@ -15,7 +17,7 @@ public class GetBoardDTO {
     public record ColumnResponse(
             Long columnId,
             String columnTitle,
-            int orders,
+            int columnOrders,
             List<CardResponse> cardList
     ){}
 
@@ -23,6 +25,8 @@ public class GetBoardDTO {
             Long cardId,
             String cardTitle,
             String cardContent,
+            int cardOrders,
+            Long userId,
             String username
     ){}
 }

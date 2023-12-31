@@ -5,5 +5,6 @@ import org.springframework.data.repository.query.Param;
 import talmo5.talmorello.board.dto.GetBoardDTO;
 
 public interface BoardRepositoryCustom {
-    List<GetBoardDTO.Response> findByIdWithCatalogListAndCardList(@Param("boardId") Long boardId);
+    List<GetBoardDTO.ColumnResponse> findByIdWithColumnListAndCardList(@Param("boardId") Long boardId);
 }
+

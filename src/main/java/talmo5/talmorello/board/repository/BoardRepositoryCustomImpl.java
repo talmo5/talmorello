@@ -1,5 +1,8 @@
 package talmo5.talmorello.board.repository;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
+
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -18,67 +21,47 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<GetBoardDTO.Response> findByIdWithCatalogListAndCardList(Long boardId) {
+    public List<GetBoardDTO.ColumnResponse> findByIdWithColumnListAndCardList(Long boardId) {
         QBoard board = QBoard.board;
         QColumn column = QColumn.column;
         QCard card = QCard.card;
         QUser user = QUser.user;
-        /*
-          select
-              b.id, b.title, b.content, b.board_color, c.id, c.title, c.orders, cd.id, cd.title, cd.content, cd.orders, u.id, u.username"
-          from
-              board b
-          left join
-              columns c
-          on
-              b.id = c.board_id
-          left join
-              talmorello.card cd
-          on
-              c.id = cd.column_id
-          join
-              talmorello.user u
-          on
-              cd.user_id = u.id
-          where
-              b.id = :boardId
-         */
-        // InvalidDataAccessApiUsageException: org.hibernate.query.sqm.InterpretationException
-        // this may indicate a semantic (user query) problem or a bug in the parser
-        // InterpretationException: Error interpreting query
+
         return queryFactory.select(
-                        Projections.constructor(
-                                GetBoardDTO.Response.class,
-                                board.id,
-                                board.title,
-                                board.content,
-                                board.boardColor,
-                                Projections.list(
-                                        Projections.constructor(
-                                                GetBoardDTO.ColumnResponse.class,
-                                                column.id,
-                                                column.title,
-                                                column.orders,
-                                                Projections.list(
-                                                        Projections.constructor(
-                                                                GetBoardDTO.CardResponse.class,
-                                                                card.id,
-                                                                card.title,
-                                                                card.content,
-                                                                user.username
-                                                        )
+                        board.id, board.title, board.boardColor,
+                        column.id, column.title, column.orders,
+                        card.id, card.title, card.content, card.orders,
+                        user.id, user.username
+                )
+                .from(board)
+                .leftJoin(column)
+                .on(board.id.eq(column.board.id))
+                .leftJoin(card)
+                .on(column.id.eq(card.column.id))
+                .join(user)
+                .on(user.id.eq(card.user.id))
+                .where(board.id.eq(boardId))
+                .orderBy(card.id.asc(), user.id.asc())
+                .transform(
+                        groupBy(column.id).list(
+                                Projections.constructor(
+                                        GetBoardDTO.ColumnResponse.class,
+                                        column.id.as("columnId"),
+                                        column.title.as("columnTitle"),
+                                        column.orders.as("columnOrders"),
+                                        GroupBy.list(
+                                                Projections.constructor(
+                                                        GetBoardDTO.CardResponse.class,
+                                                        card.id.as("cardId"),
+                                                        card.title.as("cardTitle"),
+                                                        card.content.as("cardContent"),
+                                                        card.orders.as("cardOrders"),
+                                                        user.id.as("userId"),
+                                                        user.username.as("username")
                                                 )
                                         )
                                 )
                         )
-                )
-                .from(board)
-                .leftJoin(column.board, board).on(column.board.id.eq(board.id))
-                .leftJoin(card.column, column).on(card.column.id.eq(column.id))
-                .join(card.user, user).on(card.user.id.eq(user.id))
-                .where(board.id.eq(boardId))
-                .fetch();
+                );
     }
-
-
 }

@@ -43,5 +43,4 @@ public class BoardController {
     public ResponseEntity<?> getBoard(@PathVariable Long boardId){
         return ResponseEntity.ok().body(boardService.getBoard(boardId));
     }
-
 }
