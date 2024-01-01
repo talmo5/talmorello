@@ -13,6 +13,7 @@ import talmo5.talmorello.global.exception.comment.CommentNotFoundException;
 import talmo5.talmorello.global.exception.common.ErrorCode;
 import talmo5.talmorello.global.exception.common.UnAuthorizedModifyException;
 import talmo5.talmorello.user.entity.User;
+import talmo5.talmorello.user.service.UserService;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class CommentService {
 
     private final CardService cardService;
 
-//    private final UserService userService;
+    private final UserService userService;
 
     private final CommentRepository commentRepository;
 
@@ -28,10 +29,8 @@ public class CommentService {
             RegisterCommentDTO.Request requestDTO, Long userId) {
 
         // TODO 보드 사용자인지 검증 로직
-//        Card card = cardService.findById(cardId);
-//        User user = userService.findById(userId);
-        Card card = Card.builder().build();
-        User user = User.builder().build();
+        Card card = cardService.findById(cardId);
+        User user = userService.findById(userId);
 
         Comment comment = requestDTO.createComment(requestDTO.commentContent(), card, user);
 

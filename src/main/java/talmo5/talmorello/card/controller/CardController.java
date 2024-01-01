@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.card.constant.Priority;
 import talmo5.talmorello.card.dto.CreateCardDTO;
+import talmo5.talmorello.card.dto.GetCardDTO;
 import talmo5.talmorello.card.dto.ModifyCardDateDTO;
 import talmo5.talmorello.card.dto.ModifyCardDescriptionDTO;
 import talmo5.talmorello.card.dto.ModifyCardTitleDTO;
@@ -33,6 +35,14 @@ public class CardController {
             @LoginUserId Long userId) {
 
         CreateCardDTO.Response responseDTO = cardService.createCard(columnId, createCardDTO, userId);
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/{cardId}")
+    public ResponseEntity<GetCardDTO> getCard(@PathVariable Long cardId, @LoginUserId Long userId) {
+
+        GetCardDTO responseDTO = cardService.getCard(cardId, userId);
 
         return ResponseEntity.ok(responseDTO);
     }

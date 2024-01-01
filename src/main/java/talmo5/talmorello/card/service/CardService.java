@@ -11,6 +11,7 @@ import talmo5.talmorello.boarduser.validator.BoardUserValidator;
 import talmo5.talmorello.card.constant.Priority;
 import talmo5.talmorello.card.dto.CreateCardDTO;
 import talmo5.talmorello.card.dto.CreateCardDTO.Response;
+import talmo5.talmorello.card.dto.GetCardDTO;
 import talmo5.talmorello.card.dto.ModifyCardDateDTO;
 import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.card.repository.CardRepository;
@@ -62,6 +63,18 @@ public class CardService {
         if(orders == null) return 0L;
 
         return orders;
+    }
+
+    public GetCardDTO getCard(Long cardId, Long userId) {
+
+        User user = userService.findById(userId);
+        Card card = cardRepository.getCardWithUserAndCommentListAndTodoList(cardId)
+                .orElseThrow(CardNotFoundException::new);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+
+        boardUserValidator.validateBoardUser(board, user);
+
+        return GetCardDTO.from(card);
     }
 
     @Transactional
@@ -212,4 +225,9 @@ public class CardService {
         cardUserRepository.deleteAllCardUserByCardId(card.getId());
         cardRepository.deleteCard(card, card.getColumn());
     }
+
+    public Card findById(Long cardId) {
+        return cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+    }
+
 }
