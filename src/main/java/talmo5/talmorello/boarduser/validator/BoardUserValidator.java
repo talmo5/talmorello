@@ -14,7 +14,7 @@ public class BoardUserValidator {
     private final BoardUserService boardUserService;
 
     public void validateBoardUser(Board board, User user) {
-        if (boardUserService.existBoardUserByUserId(board, user)) {
+        if (!boardUserService.existBoardUserByUserId(board, user)) {
             throw new BoardUserNotFoundException();
         }
     }

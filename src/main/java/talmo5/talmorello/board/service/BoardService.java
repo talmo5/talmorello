@@ -28,16 +28,16 @@ public class BoardService{
 
     @Transactional
     public void patchBoard(ModifyBoardDTO.Request requestDto, Long boardId) {
-        Board board = findbyId(boardId);
+        Board board = findById(boardId);
         board.update(requestDto.title(), requestDto.content(), requestDto.boardColor());
     }
 
     public void deleteBoard(Long boardId) {
-        Board board = findbyId(boardId);
+        Board board = findById(boardId);
         boardRepository.delete(board);
     }
 
-    private Board findbyId(Long boardId) {
+    public Board findById(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
     }
 
