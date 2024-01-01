@@ -1,6 +1,6 @@
 # :panda_face: Talmorello :panda_face:
 ### 프로젝트 관리와 작업 흐름을 효율적으로 관리하기 위해 칸반 보드 기반의 서비스를 제공하는
-### `Trello`를 모방한 백엔드 API 서버 프로젝트입니다.
+### [`Trello`](https://trello.com/)를 모방한 백엔드 API 서버 프로젝트입니다.
 
 ## 팀원 소개
 ### 탈모 5조
