@@ -13,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import talmo5.talmorello.auditing.BaseTime;
 import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.user.entity.User;
@@ -32,6 +34,7 @@ public class Comment extends BaseTime {
     private String content;
 
     @JoinColumn(name = "card_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Card card;
 
