@@ -37,7 +37,7 @@ public class BoardController {
         return ResponseEntity.ok().body(boardService.getBoard(boardId));
     }
 
-    @PostMapping("/{boardId}/{inviteUserId}")
+    @PostMapping("/{boardId}/user/{inviteUserId}")
     public ResponseEntity<?> inviteUser(@PathVariable Long boardId, @PathVariable Long inviteUserId){
         boardService.inviteUser(boardId, inviteUserId);
         return ResponseEntity.ok().body("초대 성공");
