@@ -3,6 +3,9 @@ package talmo5.talmorello.card.repository.custom;
 import static talmo5.talmorello.board.entity.QBoard.board;
 import static talmo5.talmorello.card.entity.QCard.card;
 import static talmo5.talmorello.column.entity.QColumn.column;
+import static talmo5.talmorello.comment.entity.QComment.comment;
+import static talmo5.talmorello.todo.entity.QTodo.todo;
+import static talmo5.talmorello.user.entity.QUser.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -13,6 +16,7 @@ import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.card.entity.QCard;
 import talmo5.talmorello.column.entity.Column;
 import talmo5.talmorello.column.entity.QColumn;
+import talmo5.talmorello.user.entity.QUser;
 
 @RequiredArgsConstructor
 public class CustomCardRepositoryImpl implements CustomCardRepository{
@@ -123,5 +127,19 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
 
         em.flush();
         em.clear();
+    }
+
+    @Override
+    public Optional<Card> getCardWithUserAndCommentListAndTodoList(Long cardId) {
+
+        QUser commentUser = new QUser("commentUser");
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(card)
+                .leftJoin(card.user, user).fetchJoin()
+                .leftJoin(card.commentList, comment).fetchJoin()
+                .leftJoin(comment.user, commentUser).fetchJoin()
+                .leftJoin(card.todoList, todo).fetchJoin()
+                .where(card.id.eq(cardId))
+                .fetchOne());
     }
 }

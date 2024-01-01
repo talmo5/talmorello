@@ -10,7 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +20,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import talmo5.talmorello.auditing.BaseTime;
 import talmo5.talmorello.card.constant.Priority;
+import talmo5.talmorello.comment.entity.Comment;
+import talmo5.talmorello.todo.entity.Todo;
 import talmo5.talmorello.user.entity.User;
 
 @Getter
@@ -55,6 +59,12 @@ public class Card extends BaseTime {
     @JoinColumn(name = "column_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private talmo5.talmorello.column.entity.Column column;
+
+    @OneToMany(mappedBy = "card")
+    private Set<Comment> commentList;
+
+    @OneToMany(mappedBy = "card")
+    private Set<Todo> todoList;
 
     public void changeCardTitle(String cardTitle) {
         this.title = cardTitle;

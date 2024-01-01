@@ -22,7 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public SignupRequestDTO.Response signup(SignupRequestDTO.Request requestDto){
+    public SignupRequestDTO.Response signup(SignupRequestDTO.Request requestDto) {
         String username = requestDto.username();
         String password = passwordEncoder.encode(requestDto.password());
         String email = requestDto.email();
@@ -48,13 +48,13 @@ public class UserService {
         }
     }
 
-    public void login(LoginRequestDTO requestDto, HttpServletResponse res){
+    public void login(LoginRequestDTO requestDto, HttpServletResponse res) {
         String username = requestDto.username();
         String password = requestDto.password();
 
         User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        if (!passwordEncoder.matches(password, user.getPassword())){
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new PasswordMismatchedException();
         }
 
@@ -62,6 +62,14 @@ public class UserService {
         jwtUtil.addJwtToCookie(token, res);
     }
 
+    public void deleteUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        userRepository.delete(user);
+    }
+  
     public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }

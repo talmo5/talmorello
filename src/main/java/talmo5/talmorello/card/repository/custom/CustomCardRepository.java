@@ -18,4 +18,6 @@ public interface CustomCardRepository {
     void deleteCard(Card card, Column column);
 
     void changeOrders(Long cardId, Long columnId, int newOrders, int oldOrders);
+
+    Optional<Card> getCardWithUserAndCommentListAndTodoList(Long cardId);
 }
