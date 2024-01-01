@@ -46,4 +46,8 @@ public class Column extends BaseTime {
   public void modifyColumnName(String title) {
     this.title = title;
   }
+
+  public void changeOrders(Integer orders) {this.orders = orders;}
+
+
 }

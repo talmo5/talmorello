@@ -1,21 +1,29 @@
 package talmo5.talmorello.card.service;
 
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talmo5.talmorello.board.entity.Board;
+import talmo5.talmorello.boarduser.validator.BoardUserValidator;
+import talmo5.talmorello.card.constant.Priority;
 import talmo5.talmorello.card.dto.CreateCardDTO;
-import talmo5.talmorello.card.dto.CreateCardDTO.Request;
 import talmo5.talmorello.card.dto.CreateCardDTO.Response;
+import talmo5.talmorello.card.dto.ModifyCardDateDTO;
 import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.card.repository.CardRepository;
 import talmo5.talmorello.carduser.entity.CardUser;
 import talmo5.talmorello.carduser.repository.CardUserRepository;
 import talmo5.talmorello.column.entity.Column;
+import talmo5.talmorello.column.service.ColumnService;
+import talmo5.talmorello.global.exception.board.BoardNotFoundException;
 import talmo5.talmorello.global.exception.card.AlreadyUserOfCardException;
 import talmo5.talmorello.global.exception.card.CardNotFoundException;
+import talmo5.talmorello.global.exception.column.InvalidNewOrdersException;
 import talmo5.talmorello.user.entity.User;
+import talmo5.talmorello.user.service.UserService;
 
 @Service
 @RequiredArgsConstructor
@@ -25,98 +33,183 @@ public class CardService {
 
     private final CardUserRepository cardUserRepository;
 
-    private User tmpUser = User.builder()
-            .id(1L)
-            .email("wkdehdgk159@gmail.com")
-            .username("dongha")
-            .build();
+    private final BoardUserValidator boardUserValidator;
 
-    private Column tmpColumn = Column.builder()
-            .id(2L)
-            .title("임시 컬럼")
-            .build();
+    private final UserService userService;
 
-    public Response createCard(Request createCardDTO, Long userId, Long columnId) {
+    private final ColumnService columnService;
 
-        //userService 에서 userId에 해당하는 유저 받아오기
-        //User user = userService.findUserById(userId);
-        //Column column = columnService.findColumnById(columnId);
+    public Response createCard(Long columnId, CreateCardDTO.Request createCardDTO, Long userId) {
 
-        int orders = getLastOrders();
+        User user = userService.findById(userId);
+        Column column = columnService.getColumnWithBoard(columnId);
 
-        Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), tmpUser,
-                orders + 1, tmpColumn);
+        boardUserValidator.validateBoardUser(column.getBoard(), user);
+
+        Long orders = getLastOrders(columnId);
+        Card card = createCardDTO.toEntity(createCardDTO.cardTitle(), user,
+                Math.toIntExact(orders + 1), column);
 
         cardRepository.save(card);
 
         return CreateCardDTO.Response.of(card);
     }
 
-    private int getLastOrders() {
+    private Long getLastOrders(Long columnId) {
 
-        Integer orders = cardRepository.getLastOrders();
+        Long orders = cardRepository.getMaxOrderOfCardByColumnId(columnId);
 
-        if(orders == null) return 0;
+        if(orders == null) return 0L;
 
         return orders;
     }
 
     @Transactional
-    public void modifyCardTitle(Long cardId, String cardTitle) {
+    public void modifyCardTitle(Long cardId, String cardTitle, Long userId) {
 
+        User user = userService.findById(userId);
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+
+        boardUserValidator.validateBoardUser(board, user);
 
         card.changeCardTitle(cardTitle);
     }
 
     @Transactional
-    public void modifyCardDescription(Long cardId, String cardDescription) {
+    public void modifyCardDescription(Long cardId, String cardDescription, Long userId) {
 
+        User user = userService.findById(userId);
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+
+        boardUserValidator.validateBoardUser(board, user);
 
         card.changeCardDescription(cardDescription);
     }
 
     @Transactional
-    public void changeColumnOfCard(Long cardId, Long columnId, int cardOrders) {
+    public void changeOrder(Long cardId, int newOrders, Long userId) {
 
-        //Column column = columnService.findColumById(columnId);
+        Card card = cardRepository.getCardWithColumn(cardId).orElseThrow(CardNotFoundException::new);
+        User user = userService.findById(userId);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
 
-        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        boardUserValidator.validateBoardUser(board, user);
 
-        cardRepository.addOneToCardOrders(cardOrders, tmpColumn);
+        Long maxOrders = cardRepository.getMaxOrderOfCardByColumnId(card.getColumn().getId());
 
-        card.changeColumnOfCard(tmpColumn, cardOrders);
+        if(newOrders < 1 || newOrders > maxOrders) {
+            throw new InvalidNewOrdersException();
+        }
+
+        cardRepository.changeOrders(cardId, card.getColumn().getId(), newOrders, card.getOrders());
     }
 
-    public void addUserToCard(Long cardId, Long userId) {
+    @Transactional
+    public void changeColumnOfCard(Long cardId, int cardOrders, Long columnId, Long userId) {
+
+        Card card = cardRepository.getCardWithColumn(cardId).orElseThrow(CardNotFoundException::new);
+        Column column = columnService.getColumnWithBoard(columnId);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+        User user = userService.findById(userId);
+
+        boardUserValidator.validateBoardUser(board, user);
+
+        validateChangeColumnOfCard(board, column, card, columnId, cardOrders);
+
+        cardRepository.changeColumnOfCard(cardOrders, cardId, column);
+    }
+
+    private void validateChangeColumnOfCard(Board board, Column column, Card card, Long columnId, int cardOrders) {
+        if(!column.getBoard().getId().equals(board.getId())) {
+            throw new BoardNotFoundException();
+        }
+
+        if(card.getColumn().getId().equals(columnId)) {
+            throw new AlreadyUserOfCardException();
+        }
+
+        if(cardOrders < 1 || cardOrders > cardRepository.getMaxOrderOfCardByColumnId(columnId)) {
+            throw new InvalidNewOrdersException();
+        }
+    }
+
+    public void addUserToCard(Long cardId, Long userIdToAdd, Long userId) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
-        //User user = userService.findUserById(userId);
-        verifyUserNotExistsInCard(cardId, tmpUser);
+        User user = userService.findById(userId);
+        User userToAdd = userService.findById(userIdToAdd);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
 
-        CardUser cardUser = CardUser.makeCardUser(card, tmpUser);
+        boardUserValidator.validateBoardUser(board, user);
+        verifyUserNotExistsInCard(cardId, userToAdd.getId());
+
+        CardUser cardUser = CardUser.makeCardUser(card, userToAdd);
 
         cardUserRepository.save(cardUser);
     }
 
-    private void verifyUserNotExistsInCard(Long cardId, User user) {
+    private void verifyUserNotExistsInCard(Long cardId, Long userIdToAdd) {
 
         Optional<CardUser> cardUser = cardUserRepository.
-                findCardUserByCardIdAndUserId(cardId, user.getId());
+                findCardUserByCardIdAndUserId(cardId, userIdToAdd);
 
         if(cardUser.isPresent()) {
             throw new AlreadyUserOfCardException();
         }
     }
 
-    public void deleteCardUser(Long cardId, Long userId) {
+    @Transactional
+    public void deleteCardUser(Long cardId, Long userIdToDelete, Long userId) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
-        //User user = userService.findUserById(userId);
+        User user = userService.findById(userId);
+        User userToDelete = userService.findById(userIdToDelete);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
 
-        CardUser cardUser = CardUser.makeCardUser(card, tmpUser);
+        boardUserValidator.validateBoardUser(board, user);
 
-        cardUserRepository.delete(cardUser);
+        cardUserRepository.deleteCardUserByCardUserPK_CardAndCardUserPK_User(card, userToDelete);
+    }
+
+    @Transactional
+    public void modifyCardDate(
+            Long cardId, ModifyCardDateDTO modifyCardDateDTO, Long userId) {
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        User user = userService.findById(userId);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+
+        boardUserValidator.validateBoardUser(board, user);
+
+        LocalDateTime startDate = modifyCardDateDTO.startDate();
+        LocalDateTime dueDate = modifyCardDateDTO.dueDate();
+        card.changeCardDate(startDate, dueDate);
+    }
+
+    @Transactional
+    public void modifyCardPriority(Long cardId, Priority priority, Long userId) {
+
+        Card card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        User user = userService.findById(userId);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+
+        boardUserValidator.validateBoardUser(board, user);
+
+        card.changePriority(priority);
+    }
+
+    @Transactional
+    public void deleteCard(Long cardId, Long userId) {
+
+        Card card = cardRepository.getCardWithColumn(cardId).orElseThrow(CardNotFoundException::new);
+        User user = userService.findById(userId);
+        Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+
+        boardUserValidator.validateBoardUser(board, user);
+
+        cardUserRepository.deleteAllCardUserByCardId(card.getId());
+        cardRepository.deleteCard(card, card.getColumn());
     }
 }

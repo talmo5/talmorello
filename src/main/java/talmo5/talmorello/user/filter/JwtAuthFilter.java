@@ -37,9 +37,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throw new IllegalArgumentException("Token Error");
         }
 
-        Long userId = jwtUtil.getUserIdFromToken(token);
-
-        req.setAttribute("userId", userId);
         filterChain.doFilter(req, res);
     }
 

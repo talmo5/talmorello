@@ -64,13 +64,15 @@ public class UserService {
         jwtUtil.addJwtToCookie(token, res);
     }
 
-
     public void deleteUser(Long id) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
         userRepository.delete(user);
+  
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
 }

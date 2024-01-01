@@ -31,10 +31,12 @@ public enum ErrorCode {
 
     // Board
     NOT_FOUND_BOARD_EXCEPTION(401, "해당 보드를 찾을 수 없습니다."),
+    NOT_FOUND_BOARD_USER_EXCEPTION(401, "해당 유저는 보드 유저가 아닙니다."),
 
     // Column
     NOT_FOUND_COLUMN_EXCEPTION(401, "해당 컬럼을 찾을 수 없습니다."),
     INVALID_ORDER_EXCEPTION(401, "변경할 수 없는 순서입니다."),
+    INVALID_NEW_ORDERS_EXCEPTION(401, "변경할 수 없는 순서입니다."),
 
     // Card
     NOT_FOUND_CARD_EXCEPTION(401, "해당 카드를 찾을 수 없습니다."),
