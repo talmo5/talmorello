@@ -92,4 +92,36 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
         em.flush();
         em.clear();
     }
+
+    @Override
+    public void changeOrders(Long cardId, Long columnId, int newOrders, int oldOrders) {
+
+        if(newOrders > oldOrders) {
+            jpaQueryFactory
+                    .update(card)
+                    .set(card.orders, card.orders.subtract(1))
+                    .where(card.orders.gt(oldOrders),
+                            card.orders.loe(newOrders),
+                            card.column.id.eq(columnId))
+                    .execute();
+        }
+
+        else {
+            jpaQueryFactory
+                    .update(card)
+                    .set(card.orders, card.orders.add(1))
+                    .where(card.orders.lt(oldOrders),
+                            card.orders.goe(newOrders),
+                            card.column.id.eq(columnId))
+                    .execute();
+        }
+
+        jpaQueryFactory.update(card)
+                .set(card.orders, newOrders)
+                .where(card.id.eq(cardId))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
 }
