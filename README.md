@@ -9,9 +9,10 @@
 |[손창현](https://github.com/mistarson)|[손다희](https://github.com/sxxdxh2)|[장동하](https://github.com/wkdehdgk159)|[조예린](https://github.com/rinyejo)|[홍효정](https://github.com/dearel4416)|
 
 ## 아키텍처
+### 서비스
 ![normal](https://github.com/talmo5/talmorello/assets/40788498/819db46e-a5f1-45d1-af0b-e4ebe1683a24)
 
-## CI/CD 아키텍처
+### CI/CD
 ![cicd](https://github.com/talmo5/talmorello/assets/40788498/1f4bd3fb-92b4-401a-82d8-ea3fcc54276a)
 
 ## 기술 스택
