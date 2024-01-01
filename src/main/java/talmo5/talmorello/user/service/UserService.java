@@ -65,12 +65,12 @@ public class UserService {
     }
 
 
-    public ResponseEntity<String> deleteUser(Long id) {
+    public void deleteUser(Long id) {
+
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
         userRepository.delete(user);
-        return ResponseEntity.ok("회원 삭제 완료! 삭제된 회원 ID: " + id);
     }
 
 }
