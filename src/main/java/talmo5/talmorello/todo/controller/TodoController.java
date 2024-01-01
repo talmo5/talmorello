@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import talmo5.talmorello.global.argumentresolver.LoginUserId;
 import talmo5.talmorello.todo.dto.EditTodoDTO;
 import talmo5.talmorello.todo.dto.RegisterTodoDTO;
 import talmo5.talmorello.todo.dto.RegisterTodoDTO.Response;
@@ -24,9 +25,8 @@ public class TodoController {
 
     @PostMapping("/card/{cardId}")
     public ResponseEntity<?> registerTodo(@PathVariable Long cardId, @Valid @RequestBody
-    RegisterTodoDTO.Request requestDTO) {
+    RegisterTodoDTO.Request requestDTO, @LoginUserId Long userId) {
 
-        Long userId = 1L;
         Response response = todoService.registerTodo(requestDTO, cardId, userId);
 
         return ResponseEntity.ok(response);
@@ -34,36 +34,32 @@ public class TodoController {
 
     @PatchMapping("/{todoId}")
     public ResponseEntity<?> editTodo(@PathVariable Long todoId,
-            @Valid @RequestBody EditTodoDTO requestDTO) {
+            @Valid @RequestBody EditTodoDTO requestDTO, @LoginUserId Long userId) {
 
-        Long userId = 1L;
         todoService.editTodo(requestDTO, todoId, userId);
 
         return ResponseEntity.ok("할일 내용 수정 성공");
     }
 
     @PostMapping("{todoId}/check")
-    public ResponseEntity<?> checkTodo(@PathVariable Long todoId) {
+    public ResponseEntity<?> checkTodo(@PathVariable Long todoId, @LoginUserId Long userId) {
 
-        Long userId = 1L;
         todoService.checkTodo(todoId, userId);
 
         return ResponseEntity.ok("할일 체크 성공");
     }
 
     @PostMapping("{todoId}/uncheck")
-    public ResponseEntity<?> uncheckTodo(@PathVariable Long todoId) {
+    public ResponseEntity<?> uncheckTodo(@PathVariable Long todoId, @LoginUserId Long userId) {
 
-        Long userId = 1L;
         todoService.uncheckTodo(todoId, userId);
 
         return ResponseEntity.ok("할일 체크 해제 성공");
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId) {
+    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId, @LoginUserId Long userId) {
 
-        Long userId = 1L;
         todoService.deleteTodo(todoId, userId);
 
         return ResponseEntity.ok("할일 삭제 성공");

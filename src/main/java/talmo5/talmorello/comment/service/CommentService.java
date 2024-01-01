@@ -3,12 +3,15 @@ package talmo5.talmorello.comment.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import talmo5.talmorello.board.entity.Board;
+import talmo5.talmorello.boarduser.validator.BoardUserValidator;
 import talmo5.talmorello.card.entity.Card;
 import talmo5.talmorello.card.service.CardService;
 import talmo5.talmorello.comment.dto.EditCommentDTO;
 import talmo5.talmorello.comment.dto.RegisterCommentDTO;
 import talmo5.talmorello.comment.entity.Comment;
 import talmo5.talmorello.comment.respository.CommentRepository;
+import talmo5.talmorello.global.exception.board.BoardNotFoundException;
 import talmo5.talmorello.global.exception.comment.CommentNotFoundException;
 import talmo5.talmorello.global.exception.common.ErrorCode;
 import talmo5.talmorello.global.exception.common.UnAuthorizedModifyException;
@@ -23,14 +26,18 @@ public class CommentService {
 
     private final UserService userService;
 
+    private final BoardUserValidator boardUserValidator;
+
     private final CommentRepository commentRepository;
 
     public RegisterCommentDTO.Response registerComment(Long cardId,
             RegisterCommentDTO.Request requestDTO, Long userId) {
 
-        // TODO 보드 사용자인지 검증 로직
         Card card = cardService.findById(cardId);
+        Board board = cardService.getBoardByCardId(cardId);
         User user = userService.findById(userId);
+
+        boardUserValidator.validateBoardUser(board, user);
 
         Comment comment = requestDTO.createComment(requestDTO.commentContent(), card, user);
 
@@ -40,10 +47,14 @@ public class CommentService {
     }
 
     @Transactional
-    public void editComment(Long commentId, EditCommentDTO requestDTO) {
+    public void editComment(Long commentId, EditCommentDTO requestDTO, Long userId) {
 
-        // TODO 같은 서비스에 있는 것을 써도 되나?
         Comment comment = findById(commentId);
+        Board board = commentRepository.findBoardByCommentId(commentId)
+                .orElseThrow(BoardNotFoundException::new);
+        User user = userService.findById(userId);
+
+        boardUserValidator.validateBoardUser(board, user);
 
         comment.updateComment(requestDTO.commentContent());
     }
@@ -56,6 +67,12 @@ public class CommentService {
 
         Comment comment = commentRepository.findByIdWithUser(commentId)
                 .orElseThrow(CommentNotFoundException::new);
+
+        Board board = commentRepository.findBoardByCommentId(commentId)
+                .orElseThrow(BoardNotFoundException::new);
+        User user = userService.findById(userId);
+
+        boardUserValidator.validateBoardUser(board, user);
 
         validateDeleteAuthorization(comment.getUser().getId(), userId);
 

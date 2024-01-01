@@ -230,4 +230,7 @@ public class CardService {
         return cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
     }
 
+    public Board getBoardByCardId(Long cardId) {
+        return cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+    }
 }
