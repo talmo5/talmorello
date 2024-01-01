@@ -39,12 +39,6 @@ public class CardController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    //카드에 따른 댓글, 체크리스트들 다 가져오는 게 관건
-
-    //1번 옵션. 그냥 카드, 댓글, 체크리스트를 하나씩 가져온다. 쿼리 3개
-    //2번 옵션. 어차피 두개 컬렉션은 페치조인 못하니까  카드-댓글 페치조인, 체크리스트 가져오기로 쿼리 2개 날린다. - 연관관계 맺기
-    //3번 옵션. 쿼리 하나로?
-
     @GetMapping("/{cardId}")
     public ResponseEntity<GetCardDTO> getCard(@PathVariable Long cardId, @LoginUserId Long userId) {
 
