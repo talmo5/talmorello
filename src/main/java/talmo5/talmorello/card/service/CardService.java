@@ -212,4 +212,12 @@ public class CardService {
         cardUserRepository.deleteAllCardUserByCardId(card.getId());
         cardRepository.deleteCard(card, card.getColumn());
     }
+
+    public Card findById(Long cardId) {
+        return cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+    }
+
+    public Board getBoardByCardId(Long cardId) {
+        return cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
+    }
 }
