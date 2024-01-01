@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.comment.dto.EditCommentDTO;
 import talmo5.talmorello.comment.dto.RegisterCommentDTO;
 import talmo5.talmorello.comment.service.CommentService;
+import talmo5.talmorello.global.argumentresolver.LoginUserId;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +24,9 @@ public class CommentController {
 
     @PostMapping("/card/{cardId}")
     public ResponseEntity<?> registerComment(
-            @PathVariable Long cardId, @Valid @RequestBody RegisterCommentDTO.Request requestDTO) {
+            @PathVariable Long cardId, @Valid @RequestBody RegisterCommentDTO.Request requestDTO,
+            @LoginUserId Long userId) {
 
-        Long userId = 1L;
         RegisterCommentDTO.Response responseDTO =
                 commentService.registerComment(cardId, requestDTO, userId);
 
@@ -35,17 +36,16 @@ public class CommentController {
     @PatchMapping("/{commentId}")
     public ResponseEntity<?> editComment(
             @PathVariable Long commentId,
-            @Valid @RequestBody EditCommentDTO requestDTO) {
+            @Valid @RequestBody EditCommentDTO requestDTO, @LoginUserId Long userId) {
 
-        commentService.editComment(commentId, requestDTO);
+        commentService.editComment(commentId, requestDTO, userId);
 
         return ResponseEntity.ok("댓글 수정 성공");
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId, Long userId) {
 
-        Long userId = 1L;
         commentService.deleteComment(commentId, userId);
 
         return ResponseEntity.ok("댓글 삭제 성공");
