@@ -62,6 +62,8 @@ public class UserService {
         jwtUtil.addJwtToCookie(token, res);
     }
 
-
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    }
 
 }

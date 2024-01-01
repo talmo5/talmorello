@@ -16,73 +16,83 @@ import talmo5.talmorello.global.exception.column.InvalidNewOrdersException;
 @RequiredArgsConstructor
 public class ColumnService {
 
-  private final ColumnRepository columnRepository;
-  private static final int ORDER_MIN_VALUE = 1;
+    private final ColumnRepository columnRepository;
+    private static final int ORDER_MIN_VALUE = 1;
 
-  private Board board = Board.builder()
-          .id(1L)
-          .title("helloworld")
-          .content("hi")
-          .boardColor(BoardColor.PINK)
-          .build();
+    private Board board = Board.builder()
+            .id(1L)
+            .title("helloworld")
+            .content("hi")
+            .boardColor(BoardColor.PINK)
+            .build();
 
 
-  public Response createColumn(Long boardId, CreateColumnDTO.Request createColumnDTO) {
+    public Response createColumn(Long boardId, CreateColumnDTO.Request createColumnDTO) {
 
-    int orders = getLastOrders();
-    Column column = createColumnDTO.toEntity(createColumnDTO.columnTitle(), board, orders + 1);
+        int orders = getLastOrders();
+        Column column = createColumnDTO.toEntity(createColumnDTO.columnTitle(), board, orders + 1);
 
-    columnRepository.save(column);
+        columnRepository.save(column);
 
-    return CreateColumnDTO.Response.from(column);
-  }
-
-  private int getLastOrders() {
-
-    Integer orders = columnRepository.getLastOrders();
-    if (orders == null) {
-      return 0;
-    }
-    return orders;
-  }
-
-  @Transactional
-  public void modifyColumnName(Long columnId, String columnTitle) {
-
-    Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
-
-    column.modifyColumnName(columnTitle);
-
-  }
-
-  @Transactional
-  public void changeColumn(Long columnId, int newOrders) {
-
-    Column column = columnRepository.getColumnWithBoard(columnId).orElseThrow(ColumnNotFoundException::new);
-
-    int oldOrders = column.getOrders();
-
-    if(newOrders > columnRepository.orderCount() || newOrders < ORDER_MIN_VALUE) {
-      throw new InvalidNewOrdersException();
+        return CreateColumnDTO.Response.from(column);
     }
 
-    if (newOrders > oldOrders) {
-      columnRepository.subtractOneToColumnOrders(column.getBoard().getId(), columnId, newOrders, oldOrders);
-    } else {
-      columnRepository.addOneToColumnOrders(column.getBoard().getId(), columnId, newOrders, oldOrders);
+    private int getLastOrders() {
+
+        Integer orders = columnRepository.getLastOrders();
+        if (orders == null) {
+            return 0;
+        }
+        return orders;
     }
-    column.changeOrders(newOrders);
-  }
 
-  @Transactional
-  public void deleteColumn(Long columnId) {
+    @Transactional
+    public void modifyColumnName(Long columnId, String columnTitle) {
 
-    Column column = columnRepository.findById(columnId).orElseThrow(ColumnNotFoundException::new);
+        Column column = columnRepository.findById(columnId)
+                .orElseThrow(ColumnNotFoundException::new);
 
-    columnRepository.subtractOrders(column.getBoard().getId(), column.getOrders());
-    columnRepository.delete(column);
-  }
+        column.modifyColumnName(columnTitle);
+
+    }
+
+    @Transactional
+    public void changeColumn(Long columnId, int newOrders) {
+
+        Column column = columnRepository.getColumnWithBoard(columnId)
+                .orElseThrow(ColumnNotFoundException::new);
+
+        int oldOrders = column.getOrders();
+
+        if (newOrders > columnRepository.orderCount() || newOrders < ORDER_MIN_VALUE) {
+            throw new InvalidNewOrdersException();
+        }
+
+        if (newOrders > oldOrders) {
+            columnRepository.subtractOneToColumnOrders(column.getBoard().getId(), columnId,
+                    newOrders, oldOrders);
+        } else {
+            columnRepository.addOneToColumnOrders(column.getBoard().getId(), columnId, newOrders,
+                    oldOrders);
+        }
+        column.changeOrders(newOrders);
+    }
+
+    @Transactional
+    public void deleteColumn(Long columnId) {
+
+        Column column = columnRepository.findById(columnId)
+                .orElseThrow(ColumnNotFoundException::new);
+
+        columnRepository.subtractOrders(column.getBoard().getId(), column.getOrders());
+        columnRepository.delete(column);
+    }
+
+    public Column getColumnWithBoard(Long columnId) {
+        return columnRepository.getColumnWithBoard(columnId)
+                .orElseThrow(ColumnNotFoundException::new);
+    }
 
 
-  }
+}
 
