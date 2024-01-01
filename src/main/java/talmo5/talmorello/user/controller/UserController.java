@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import talmo5.talmorello.global.argumentresolver.LoginUserId;
 import talmo5.talmorello.user.dto.LoginRequestDTO;
 import talmo5.talmorello.user.dto.SignupRequestDTO;
 import talmo5.talmorello.user.service.KakaoService;
@@ -43,9 +44,12 @@ public class UserController {
         return ResponseEntity.ok("로그인 성공! 환영합니다!");
     }
 
-    @DeleteMapping("/normal-users/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
+    @DeleteMapping("/normal-users")
+    public ResponseEntity<?> deleteUser(@LoginUserId Long userId) {
+
+        userService.deleteUser(userId);
+        
+        return ResponseEntity.ok("삭제 성공");
     }
 
     @GetMapping("/login/kakao")
