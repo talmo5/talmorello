@@ -20,9 +20,9 @@ public class CustomTodoRepositoryImpl implements CustomTodoRepository{
         return Optional.ofNullable(jpaQueryFactory
                 .select(board)
                 .from(todo)
-                .join(card)
-                .join(column, card.column)
-                .join(board, column.board)
+                .join(card).on(todo.card.id.eq(card.id))
+                .join(column).on(card.column.id.eq(column.id))
+                .join(board).on(column.board.id.eq(board.id))
                 .where(todo.id.eq(todoId))
                 .fetchOne()
         );
