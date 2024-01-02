@@ -1,5 +1,6 @@
 package talmo5.talmorello.boarduser.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import talmo5.talmorello.board.entity.Board;
@@ -32,5 +33,9 @@ public class BoardUserService {
                 .orElseThrow(
                         BoardUserNotFoundException::new);
         boardUserRepository.delete(boardUser);
+    }
+
+    public List<User> getBoardUsers(Board board) {
+        return boardUserRepository.findUsersByBoard(board);
     }
 }

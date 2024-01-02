@@ -1,9 +1,12 @@
 package talmo5.talmorello.boarduser.repository;
 
 import static talmo5.talmorello.boarduser.entity.QBoardUser.boardUser;
+import static talmo5.talmorello.user.entity.QUser.user;
 
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -44,5 +47,17 @@ public class BoardUserRepository {
     public void delete(BoardUser boardUser) {
         em.remove(boardUser);
         em.flush();
+    }
+
+    public List<User> findUsersByBoard(Board board) {
+        return jpaQueryFactory
+                .select(user)
+                .from(user)
+                .where(user.id.in(
+                        JPAExpressions
+                                .select(boardUser.boardUserPK.user.id)
+                                .from(boardUser)
+                                .where(boardUser.boardUserPK.board.eq(board))
+                )).fetch();
     }
 }
