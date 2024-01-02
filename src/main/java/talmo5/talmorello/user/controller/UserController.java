@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.global.argumentresolver.LoginUserId;
 import talmo5.talmorello.user.dto.LoginRequestDTO;
 import talmo5.talmorello.user.dto.SignupRequestDTO;
+import talmo5.talmorello.user.service.KakaoService;
 import talmo5.talmorello.user.service.UserService;
 
 @RestController
@@ -22,7 +23,7 @@ import talmo5.talmorello.user.service.UserService;
 public class UserController {
 
     private final UserService userService;
-
+    private final KakaoService kakaoService;
     @PostMapping("/normal-users/signup")
     public ResponseEntity<SignupRequestDTO.Response> signup(
             @RequestBody SignupRequestDTO.Request requestDTO) {
