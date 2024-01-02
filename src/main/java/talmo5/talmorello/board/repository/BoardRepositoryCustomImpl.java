@@ -1,6 +1,10 @@
 package talmo5.talmorello.board.repository;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
+import static talmo5.talmorello.board.entity.QBoard.board;
+import static talmo5.talmorello.card.entity.QCard.card;
+import static talmo5.talmorello.column.entity.QColumn.column;
+import static talmo5.talmorello.user.entity.QUser.user;
 
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
@@ -9,10 +13,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talmo5.talmorello.board.dto.GetBoardDTO;
-import talmo5.talmorello.board.entity.QBoard;
-import talmo5.talmorello.card.entity.QCard;
-import talmo5.talmorello.column.entity.QColumn;
-import talmo5.talmorello.user.entity.QUser;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,10 +22,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     @Override
     public List<GetBoardDTO.ColumnResponse> findByIdWithColumnListAndCardList(Long boardId) {
-        QBoard board = QBoard.board;
-        QColumn column = QColumn.column;
-        QCard card = QCard.card;
-        QUser user = QUser.user;
 
         return queryFactory.select(
                         board.id, board.title, board.boardColor,
@@ -41,23 +37,23 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .join(user)
                 .on(user.id.eq(card.user.id))
                 .where(board.id.eq(boardId))
-                .orderBy(card.id.asc(), user.id.asc())
+                .orderBy(column.id.asc(), card.id.asc(), user.id.asc())
                 .transform(
                         groupBy(column.id).list(
                                 Projections.constructor(
                                         GetBoardDTO.ColumnResponse.class,
-                                        column.id.as("columnId"),
-                                        column.title.as("columnTitle"),
-                                        column.orders.as("columnOrders"),
+                                        column.id,
+                                        column.title,
+                                        column.orders,
                                         GroupBy.list(
                                                 Projections.constructor(
                                                         GetBoardDTO.CardResponse.class,
-                                                        card.id.as("cardId"),
-                                                        card.title.as("cardTitle"),
-                                                        card.content.as("cardContent"),
-                                                        card.orders.as("cardOrders"),
-                                                        user.id.as("userId"),
-                                                        user.username.as("username")
+                                                        card.id,
+                                                        card.title,
+                                                        card.content,
+                                                        card.orders,
+                                                        user.id,
+                                                        user.username
                                                 )
                                         )
                                 )
