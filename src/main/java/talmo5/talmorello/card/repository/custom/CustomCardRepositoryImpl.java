@@ -19,27 +19,34 @@ import talmo5.talmorello.column.entity.QColumn;
 import talmo5.talmorello.user.entity.QUser;
 
 @RequiredArgsConstructor
-public class CustomCardRepositoryImpl implements CustomCardRepository{
+public class CustomCardRepositoryImpl implements CustomCardRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
     private final EntityManager em;
 
     @Override
-    public void changeColumnOfCard(int order, Long cardId, Column column) {
+    public void changeColumnOfCard(int order, Card cardToMove, Column newColumn, Column oldColumn) {
+
+        jpaQueryFactory
+                .update(card)
+                .set(card.orders, card.orders.subtract(1))
+                .where(card.column.id.eq(oldColumn.getId()),
+                        card.orders.gt(cardToMove.getOrders()))
+                .execute();
 
         jpaQueryFactory
                 .update(card)
                 .set(card.orders, card.orders.add(1))
-                .where(card.column.id.eq(column.getId()),
+                .where(card.column.id.eq(newColumn.getId()),
                         card.orders.goe(order))
                 .execute();
 
         jpaQueryFactory
                 .update(card)
                 .set(card.orders, order)
-                .set(card.column, column)
-                .where(card.id.eq(cardId))
+                .set(card.column, newColumn)
+                .where(card.eq(cardToMove))
                 .execute();
 
         em.flush();
@@ -95,7 +102,7 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
     @Override
     public void changeOrders(Long cardId, Long columnId, int newOrders, int oldOrders) {
 
-        if(newOrders > oldOrders) {
+        if (newOrders > oldOrders) {
             jpaQueryFactory
                     .update(card)
                     .set(card.orders, card.orders.subtract(1))
@@ -103,9 +110,7 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
                             card.orders.loe(newOrders),
                             card.column.id.eq(columnId))
                     .execute();
-        }
-
-        else {
+        } else {
             jpaQueryFactory
                     .update(card)
                     .set(card.orders, card.orders.add(1))
