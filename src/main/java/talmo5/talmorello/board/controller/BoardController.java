@@ -1,6 +1,7 @@
 package talmo5.talmorello.board.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import talmo5.talmorello.board.dto.GetBoardUserDto;
 import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.service.BoardService;
@@ -62,5 +64,13 @@ public class BoardController {
         boardService.deleteBoardUser(boardId, deleteUserId, userId);
 
         return ResponseEntity.ok().body("삭제 성공");
+    }
+
+    @GetMapping("/{boardId}/users")
+    public ResponseEntity<?> getBoardUsers(@PathVariable Long boardId) {
+
+        List<GetBoardUserDto> boardUsers = boardService.getBoardUsers(boardId);
+
+        return ResponseEntity.ok(boardUsers);
     }
 }

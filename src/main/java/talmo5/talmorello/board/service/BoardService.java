@@ -1,10 +1,13 @@
 package talmo5.talmorello.board.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import talmo5.talmorello.board.dto.GetBoardDTO;
+import talmo5.talmorello.board.dto.GetBoardUserDto;
 import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.entity.Board;
@@ -19,7 +22,7 @@ import talmo5.talmorello.user.service.UserService;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BoardService{
+public class BoardService {
 
     private final UserService userService;
 
@@ -38,7 +41,7 @@ public class BoardService{
         boardUserService.saveBoardUser(savedBoard, user);
     }
 
-    private Board buildBoard(PostBoardDTO.Request requestDto, Long userId){
+    private Board buildBoard(PostBoardDTO.Request requestDto, Long userId) {
 
         User user = userService.findById(userId);
         Board board = PostBoardDTO.BoardBuild(requestDto, user);
@@ -102,6 +105,14 @@ public class BoardService{
 
     public boolean isBoardOwner(Long userIdFromBoard, Long loginUserId) {
         return userIdFromBoard.equals(loginUserId);
+    }
+
+    public List<GetBoardUserDto> getBoardUsers(Long boardId) {
+
+        Board board = findById(boardId);
+        List<User> boardUsers = boardUserService.getBoardUsers(board);
+
+        return boardUsers.stream().map(GetBoardUserDto::from).collect(Collectors.toList());
     }
 }
 
