@@ -1,11 +1,11 @@
 package talmo5.talmorello.boarduser.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.boarduser.repository.BoardUserRepository;
 import talmo5.talmorello.user.entity.User;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,9 +13,9 @@ public class BoardUserService {
 
     private final BoardUserRepository boardUserRepository;
 
-    public boolean existBoardUserByUserId(Board board, User user) {
+    public boolean existBoardUserByUserId(Long boardId, Long userId) {
 
-        return boardUserRepository.existBoardUserByUserId(board, user);
+        return boardUserRepository.existBoardUserByUserId(boardId, userId);
     }
 
     public List<User> findUserByBoardId(Long boardId) {
