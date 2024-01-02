@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,8 +42,8 @@ public class Column extends BaseTime {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   private Board board;
 
-  @OneToMany(mappedBy = "column", cascade = CascadeType.ALL)
-  private List<Card> cardList = new ArrayList<>();
+  @OneToMany(mappedBy = "column", cascade = CascadeType.REMOVE)
+  private List<Card> cardList;
 
   public Column(String title, Integer orders) {
     this.title = title;
