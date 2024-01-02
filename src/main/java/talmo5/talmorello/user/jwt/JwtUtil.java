@@ -22,6 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import talmo5.talmorello.global.exception.common.ErrorCode;
+import talmo5.talmorello.global.exception.jwt.JwtNotFoundException;
+import talmo5.talmorello.global.exception.jwt.JwtUnsupportedEncodingException;
 
 @Component
 public class JwtUtil {
