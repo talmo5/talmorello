@@ -6,6 +6,6 @@ import talmo5.talmorello.user.entity.User;
 import java.util.List;
 
 public interface BoardUserRepositoryCustom {
-    public boolean existBoardUserByUserId(Board board, User user);
-    public List<User> findUserByBoardId(Long boardId);
+    boolean existBoardUserByUserId(Board board, User user);
+    List<User> findUserByBoardId(Long boardId);
 }

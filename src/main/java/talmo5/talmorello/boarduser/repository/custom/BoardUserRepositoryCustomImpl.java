@@ -18,6 +18,7 @@ public class BoardUserRepositoryCustomImpl implements BoardUserRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    @Override
     public boolean existBoardUserByUserId(Board board, User user) {
         return jpaQueryFactory
                 .from(boardUser)
@@ -26,6 +27,7 @@ public class BoardUserRepositoryCustomImpl implements BoardUserRepositoryCustom{
                 .fetchFirst() != null;
     }
 
+    @Override
     public List<User> findUserByBoardId(Long boardId) {
         return jpaQueryFactory
                 .select(user)
