@@ -14,7 +14,6 @@ public class SignupRequestDTO {
             String password,
             String email) {
 
-
     }
 
     @Builder
