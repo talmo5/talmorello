@@ -7,7 +7,7 @@ import talmo5.talmorello.column.entity.Column;
 
 public interface CustomCardRepository {
 
-    void changeColumnOfCard(int order, Long cardId, Column column);
+    void changeColumnOfCard(int order, Card cardToMove, Column newColumn, Column oldColumn);
 
     Optional<Card> getCardWithColumn(Long cardId);
 

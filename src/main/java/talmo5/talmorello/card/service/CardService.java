@@ -123,15 +123,16 @@ public class CardService {
     public void changeColumnOfCard(Long cardId, int cardOrders, Long columnId, Long userId) {
 
         Card card = cardRepository.getCardWithColumn(cardId).orElseThrow(CardNotFoundException::new);
-        Column column = columnService.getColumnWithBoard(columnId);
+        Column newColumn = columnService.getColumnWithBoard(columnId);
+        Column oldColumn = card.getColumn();
         Board board = cardRepository.getBoardByCardId(cardId).orElseThrow(BoardNotFoundException::new);
         User user = userService.findById(userId);
 
         boardUserValidator.validateBoardUser(board, user);
 
-        validateChangeColumnOfCard(board, column, card, columnId, cardOrders);
+        validateChangeColumnOfCard(board, newColumn, card, columnId, cardOrders);
 
-        cardRepository.changeColumnOfCard(cardOrders, cardId, column);
+        cardRepository.changeColumnOfCard(cardOrders, card, newColumn, oldColumn);
     }
 
     private void validateChangeColumnOfCard(Board board, Column column, Card card, Long columnId, int cardOrders) {
