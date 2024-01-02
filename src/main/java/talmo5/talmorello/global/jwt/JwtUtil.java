@@ -1,4 +1,4 @@
-package talmo5.talmorello.user.jwt;
+package talmo5.talmorello.global.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

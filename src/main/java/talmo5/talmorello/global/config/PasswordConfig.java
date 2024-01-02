@@ -1,4 +1,4 @@
-package talmo5.talmorello.user.config;
+package talmo5.talmorello.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

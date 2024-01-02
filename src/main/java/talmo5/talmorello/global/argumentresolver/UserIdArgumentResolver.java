@@ -7,7 +7,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import talmo5.talmorello.user.jwt.JwtUtil;
+import talmo5.talmorello.global.jwt.JwtUtil;
 
 @RequiredArgsConstructor
 public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {

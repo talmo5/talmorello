@@ -1,4 +1,4 @@
-package talmo5.talmorello.user.filter;
+package talmo5.talmorello.global.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import talmo5.talmorello.user.jwt.JwtUtil;
+import talmo5.talmorello.global.jwt.JwtUtil;
 
 @Slf4j(topic = "JwtAuthFilter")
 @Component

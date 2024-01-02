@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import talmo5.talmorello.global.argumentresolver.UserIdArgumentResolver;
-import talmo5.talmorello.user.jwt.JwtUtil;
+import talmo5.talmorello.global.jwt.JwtUtil;
 
 @Configuration
 @RequiredArgsConstructor
