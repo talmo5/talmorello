@@ -79,18 +79,13 @@ public class CustomCardRepositoryImpl implements CustomCardRepository{
     }
 
     @Override
-    public void deleteCard(Card card, Column column) {
+    public void subtractCardOrdersToDeleteCard(Card card, Column column) {
 
         jpaQueryFactory
                 .update(QCard.card)
                 .set(QCard.card.orders, QCard.card.orders.subtract(1))
                 .where(QColumn.column.eq(column),
                         QCard.card.orders.gt(card.getOrders()))
-                .execute();
-
-        jpaQueryFactory
-                .delete(QCard.card)
-                .where(QCard.card.eq(card))
                 .execute();
 
         em.flush();

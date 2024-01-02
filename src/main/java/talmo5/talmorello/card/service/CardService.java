@@ -223,7 +223,9 @@ public class CardService {
         boardUserValidator.validateBoardUser(board, user);
 
         cardUserRepository.deleteAllCardUserByCardId(card.getId());
-        cardRepository.deleteCard(card, card.getColumn());
+        cardRepository.subtractCardOrdersToDeleteCard(card, card.getColumn());
+
+        cardRepository.delete(card);
     }
 
     public Card findById(Long cardId) {
