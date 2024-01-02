@@ -1,6 +1,5 @@
 package talmo5.talmorello.user.jwt;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -29,19 +28,15 @@ public class JwtUtil {
 
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
-    // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
-    // 토큰 만료시간
     private long TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
-    @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
+    @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-    // 로그 설정
     public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
 
     @PostConstruct
@@ -50,7 +45,6 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    // 토큰 생성
     public String createToken(Long userId, String username) {
 
         Date date = new Date();
@@ -68,7 +62,7 @@ public class JwtUtil {
             token = URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20");
 
             Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token); // Name-Value
-
+            cookie.setPath("/");
             res.addCookie(cookie);
         } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage());

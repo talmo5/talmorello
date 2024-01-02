@@ -1,12 +1,15 @@
 package talmo5.talmorello.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.global.argumentresolver.LoginUserId;
 import talmo5.talmorello.user.dto.LoginRequestDTO;
@@ -45,4 +48,11 @@ public class UserController {
         
         return ResponseEntity.ok("삭제 성공");
     }
+
+    @GetMapping("/login/kakao")
+    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse res)  throws JsonProcessingException {
+        kakaoService.kakaoLogin(code, res);
+        return ResponseEntity.ok("카카오 로그인 성공! 환영합니다!");
+    }
+
 }
