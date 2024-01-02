@@ -31,13 +31,11 @@ public class CustomCommentRepositoryImpl implements CustomCommentRepository{
         return Optional.ofNullable(jpaQueryFactory
                 .select(board)
                 .from(comment)
-                .join(card)
-                .join(column, card.column)
-                .join(board, column.board)
+                .join(card).on(comment.card.id.eq(card.id))
+                .join(column).on(card.column.id.eq(column.id))
+                .join(board).on(column.board.id.eq(board.id))
                 .where(comment.id.eq(commentId))
                 .fetchOne()
         );
-
-
     }
 }
