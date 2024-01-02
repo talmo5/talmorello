@@ -1,5 +1,6 @@
 package talmo5.talmorello.column.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import talmo5.talmorello.auditing.BaseTime;
 import talmo5.talmorello.board.entity.Board;
+import talmo5.talmorello.card.entity.Card;
 
 @Getter
 @Entity
@@ -37,6 +42,9 @@ public class Column extends BaseTime {
   @JoinColumn(name = "board_id")
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   private Board board;
+
+  @OneToMany(mappedBy = "column", cascade = CascadeType.ALL)
+  private List<Card> cardList = new ArrayList<>();
 
   public Column(String title, Integer orders) {
     this.title = title;
