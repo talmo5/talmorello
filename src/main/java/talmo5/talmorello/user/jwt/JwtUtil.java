@@ -103,7 +103,6 @@ public class JwtUtil {
                 Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()
                         .getAudience());
     }
-    //  Cookie Value : JWT 가져오기
 
     public String getTokenFromRequest(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
@@ -111,9 +110,9 @@ public class JwtUtil {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
                     try {
-                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+                        return URLDecoder.decode(cookie.getValue(), "UTF-8");
                     } catch (UnsupportedEncodingException e) {
-                        throw new JwtUnsupportedEncodingException(ErrorCode.UNSUPPORTED_JWT_TOKEN_EXCEPTION,e); //인코딩
+                        throw new JwtUnsupportedEncodingException(ErrorCode.UNSUPPORTED_JWT_TOKEN_EXCEPTION,e);
                     }
                 }
             }
