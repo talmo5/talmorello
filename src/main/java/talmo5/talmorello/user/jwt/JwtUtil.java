@@ -113,11 +113,11 @@ public class JwtUtil {
                     try {
                         return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
                     } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException("Fail");
+                        throw new JwtUnsupportedEncodingException(ErrorCode.UNSUPPORTED_JWT_TOKEN_EXCEPTION,e); //인코딩
                     }
                 }
             }
         }
-        throw new RuntimeException("Not found");
+        throw new JwtNotFoundException();
     }
 }
