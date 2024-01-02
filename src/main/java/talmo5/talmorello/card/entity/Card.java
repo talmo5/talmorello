@@ -1,5 +1,6 @@
 package talmo5.talmorello.card.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -60,10 +61,10 @@ public class Card extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private talmo5.talmorello.column.entity.Column column;
 
-    @OneToMany(mappedBy = "card")
+    @OneToMany(mappedBy = "card", cascade = CascadeType.REMOVE)
     private Set<Comment> commentList;
 
-    @OneToMany(mappedBy = "card")
+    @OneToMany(mappedBy = "card", cascade = CascadeType.REMOVE)
     private Set<Todo> todoList;
 
     public void changeCardTitle(String cardTitle) {
