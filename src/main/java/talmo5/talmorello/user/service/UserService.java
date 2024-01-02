@@ -12,7 +12,7 @@ import talmo5.talmorello.global.exception.user.UserNotFoundException;
 import talmo5.talmorello.user.dto.LoginRequestDTO;
 import talmo5.talmorello.user.dto.SignupRequestDTO;
 import talmo5.talmorello.user.entity.User;
-import talmo5.talmorello.user.jwt.JwtUtil;
+import talmo5.talmorello.global.jwt.JwtUtil;
 import talmo5.talmorello.user.repository.UserRepository;
 
 @Service

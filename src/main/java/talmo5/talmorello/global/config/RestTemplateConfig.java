@@ -1,4 +1,4 @@
-package talmo5.talmorello.user.config;
+package talmo5.talmorello.global.config;
 
 import java.time.Duration;
 import org.springframework.boot.web.client.RestTemplateBuilder;

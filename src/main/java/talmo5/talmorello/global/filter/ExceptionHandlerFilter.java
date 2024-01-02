@@ -1,4 +1,4 @@
-package talmo5.talmorello.user.filter;
+package talmo5.talmorello.global.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import talmo5.talmorello.user.dto.KakaoUserInfoDTO;
 import talmo5.talmorello.user.entity.User;
-import talmo5.talmorello.user.jwt.JwtUtil;
+import talmo5.talmorello.global.jwt.JwtUtil;
 import talmo5.talmorello.user.repository.UserRepository;
 
 @Slf4j(topic = "KAKAO Login")
