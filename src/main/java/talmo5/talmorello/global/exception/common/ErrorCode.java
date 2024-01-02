@@ -32,6 +32,8 @@ public enum ErrorCode {
     // Board
     NOT_FOUND_BOARD_EXCEPTION(401, "해당 보드를 찾을 수 없습니다."),
     NOT_FOUND_BOARD_USER_EXCEPTION(401, "해당 유저는 보드 유저가 아닙니다."),
+    ALREADY_USER_OF_BOARD_EXCEPTION(401, "이미 보드에 유저가 있습니다."),
+    NO_AUTHORIZATION_REMOVE_EXCEPTION(401, "보드 오너만 삭제할 수 있습니다."),
 
     // Column
     NOT_FOUND_COLUMN_EXCEPTION(401, "해당 컬럼을 찾을 수 없습니다."),

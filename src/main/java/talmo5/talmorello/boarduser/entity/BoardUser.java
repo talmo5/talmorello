@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.boarduser.pk.BoardUserPK;
+import talmo5.talmorello.user.entity.User;
 
 @Getter
 @Entity
@@ -18,4 +20,13 @@ public class BoardUser {
 
     @EmbeddedId
     private BoardUserPK boardUserPK;
+
+    public static BoardUser buildBoardUser(Board board, User user){
+        return BoardUser.builder()
+                .boardUserPK(BoardUserPK.builder()
+                        .user(user)
+                        .board(board)
+                        .build())
+                .build();
+    }
 }

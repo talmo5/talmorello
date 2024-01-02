@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talmo5.talmorello.board.dto.ModifyBoardDTO;
 import talmo5.talmorello.board.dto.PostBoardDTO;
 import talmo5.talmorello.board.service.BoardService;
+import talmo5.talmorello.global.argumentresolver.LoginUserId;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +23,9 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<?> postBoard(@Valid @RequestBody PostBoardDTO.Request requestDto){
-        boardService.postBoard(requestDto);
+    public ResponseEntity<?> postBoard(@Valid @RequestBody PostBoardDTO.Request requestDto
+    ,@LoginUserId Long userId){
+        boardService.postBoard(requestDto, userId);
         return ResponseEntity.ok().body("생성 성공");
     }
 
@@ -42,5 +44,23 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public ResponseEntity<?> getBoard(@PathVariable Long boardId){
         return ResponseEntity.ok().body(boardService.getBoard(boardId));
+    }
+
+    @PostMapping("/{boardId}/user/{inviteUserId}")
+    public ResponseEntity<?> inviteBoardUser(@PathVariable Long boardId, @PathVariable Long inviteUserId
+    ,@LoginUserId Long userId){
+
+        boardService.inviteBoardUser(boardId, inviteUserId, userId);
+
+        return ResponseEntity.ok().body("초대 성공");
+    }
+
+    @DeleteMapping("/{boardId}/user/{deleteUserId}")
+    public ResponseEntity<?> deleteBoardUser(@PathVariable Long boardId,
+            @PathVariable Long deleteUserId, @LoginUserId Long userId) {
+
+        boardService.deleteBoardUser(boardId, deleteUserId, userId);
+
+        return ResponseEntity.ok().body("삭제 성공");
     }
 }

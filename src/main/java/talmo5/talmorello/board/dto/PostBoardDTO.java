@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import talmo5.talmorello.board.constant.BoardColor;
 import talmo5.talmorello.board.entity.Board;
+import talmo5.talmorello.user.entity.User;
 
 public class PostBoardDTO {
 
@@ -14,11 +15,12 @@ public class PostBoardDTO {
             String content,
             BoardColor boardColor) {}
 
-    public static Board BoardBuild(PostBoardDTO.Request request){
+    public static Board BoardBuild(PostBoardDTO.Request request, User user){
         return Board.builder()
                 .title(request.title())
                 .content(request.content())
                 .boardColor(request.boardColor())
+                .user(user)
                 .build();
     }
 }
