@@ -16,7 +16,6 @@ public class PostBoardDTO {
             BoardColor boardColor) {}
 
     public static Board BoardBuild(PostBoardDTO.Request request, User user){
-
         return Board.builder()
                 .title(request.title())
                 .content(request.content())
