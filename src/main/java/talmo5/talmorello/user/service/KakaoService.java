@@ -33,6 +33,9 @@ public class KakaoService {
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
+    @Value("${social.redirect-uri.kakao}")
+    private String kakaoLoginUrl;
+
 
     public void kakaoLogin(String code, HttpServletResponse res) throws JsonProcessingException {
 
@@ -57,7 +60,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "e61b6b0496bdd1d99584309e788e89e9");
-        body.add("redirect_uri", "http://localhost:8080/api/login/kakao");
+        body.add("redirect_uri", kakaoLoginUrl);
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity

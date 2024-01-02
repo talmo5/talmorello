@@ -33,10 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = jwtUtil.substringToken(tokenValue);
 
-        if (!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("Token Error");
-        }
-
+        jwtUtil.validateToken(token);
         filterChain.doFilter(req, res);
     }
 
