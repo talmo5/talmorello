@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import talmo5.talmorello.global.exception.user.PasswordMismatchedException;
 import talmo5.talmorello.global.exception.user.UserAlreadyExistException;
+import talmo5.talmorello.global.exception.user.UserEmailAlreadyExistException;
 import talmo5.talmorello.global.exception.user.UserNotFoundException;
 import talmo5.talmorello.user.dto.LoginRequestDTO;
 import talmo5.talmorello.user.dto.SignupRequestDTO;
@@ -44,7 +45,7 @@ public class UserService {
 
         Optional<User> checkEmail = userRepository.findByEmail(email);
         if (checkEmail.isPresent()) {
-            throw new UserAlreadyExistException();
+            throw new UserEmailAlreadyExistException();
         }
     }
 
