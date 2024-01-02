@@ -4,6 +4,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.user.entity.User;
 
 import java.util.List;
@@ -17,11 +18,11 @@ public class BoardUserRepositoryCustomImpl implements BoardUserRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public boolean existBoardUserByUserId(Long boardId, Long userId) {
+    public boolean existBoardUserByUserId(Board board, User user) {
         return jpaQueryFactory
                 .from(boardUser)
-                .where(boardUser.boardUserPK.board.id.eq(boardId)
-                        .and(boardUser.boardUserPK.user.id.eq(userId)))
+                .where(boardUser.boardUserPK.board.eq(board)
+                        .and(boardUser.boardUserPK.user.eq(user)))
                 .fetchFirst() != null;
     }
 
