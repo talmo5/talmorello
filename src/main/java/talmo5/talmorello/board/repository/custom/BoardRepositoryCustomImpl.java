@@ -29,7 +29,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         QUser user = QUser.user;
 
         return queryFactory.select(
-                board.id, board.title, board.boardColor,
                         column.id, column.title, column.orders,
                         card.id, card.title, card.content, card.orders,
                         user.id, user.username

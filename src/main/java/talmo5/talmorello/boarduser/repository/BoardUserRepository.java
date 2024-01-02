@@ -1,8 +1,11 @@
 package talmo5.talmorello.boarduser.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
-import talmo5.talmorello.boarduser.entity.BoardUser;
+import org.springframework.stereotype.Repository;
 import talmo5.talmorello.boarduser.repository.custom.BoardUserRepositoryCustom;
 
-public interface BoardUserRepository extends JpaRepository<BoardUser, Long>, BoardUserRepositoryCustom {
+@Repository
+@RequiredArgsConstructor
+public interface BoardUserRepository extends JpaRepository, BoardUserRepositoryCustom {
 }

@@ -1,8 +1,6 @@
 package talmo5.talmorello.board.service;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import talmo5.talmorello.board.dto.GetBoardDTO;
@@ -12,8 +10,7 @@ import talmo5.talmorello.board.entity.Board;
 import talmo5.talmorello.board.repository.BoardRepository;
 import talmo5.talmorello.boarduser.entity.BoardUser;
 import talmo5.talmorello.boarduser.repository.BoardUserRepository;
-import talmo5.talmorello.boarduser.service.BoardUserService;
-import talmo5.talmorello.global.exception.board.AlreadyUserOfBoardException;
+import talmo5.talmorello.boarduser.validator.BoardUserValidator;
 import talmo5.talmorello.global.exception.board.BoardNotFoundException;
 import talmo5.talmorello.global.exception.user.UserNotFoundException;
 import talmo5.talmorello.user.entity.User;
@@ -26,7 +23,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final BoardUserRepository boardUserRepository;
-    private final BoardUserService boardUserService;
+    private final BoardUserValidator boardUserValidator;
 
     public void postBoard(PostBoardDTO.Request requestDto) {
         buildBoard(requestDto);
@@ -64,19 +61,10 @@ public class BoardService {
         User inviteUser = userRepository.findById(inviteUserId)
                 .orElseThrow(UserNotFoundException::new);
 
-        validateDuplicateBoardUser(inviteUser, boardId);
+        boardUserValidator.validateBoardUser(board, inviteUser);
 
         BoardUser boardUser = BoardUser.buildBoardUser(board, inviteUser);
         boardUserRepository.save(boardUser);
-    }
-
-    private void validateDuplicateBoardUser(User user, Long boardId) {
-        List<User> users = boardUserService.findUserByBoardId(boardId);
-        for (User u : users) {
-            if (Objects.equals(user.getId(), u.getId())) {
-                throw new AlreadyUserOfBoardException();
-            }
-        }
     }
 
     private Board findById(Long boardId) {
